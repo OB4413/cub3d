@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/06/16 15:05:49 by obarais          ###   ########.fr       */
+/*   Updated: 2025/06/19 17:53:57 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct s_ray {
 
 typedef struct s_game
 {
+	int				keys[75361];
+	char 			char_color;
 	int				map_height;
 	int				bits_per_pixel;
 	int				size_line;
