@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/05/31 18:27:00 by obarais          ###   ########.fr       */
+/*   Updated: 2025/06/16 15:05:49 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <string.h>
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
@@ -28,7 +29,7 @@
 # define FT_ALLOC 1
 # define FT_CLEAR 0
 # define MAX_LINES 100
-# define TILE 64
+# define TILE 60
 # define MAP_WIDTH 800
 # define MAP_HEIGHT 600
 # define FOV (M_PI / 3)
@@ -39,8 +40,20 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+typedef struct s_ray {
+	double	hit_x;
+	double	hit_y;
+}	t_ray;
+
 typedef struct s_game
 {
+	int				map_height;
+	int				bits_per_pixel;
+	int				size_line;
+	int				endian;
+	void			*d_imag;
+	void			*imag;
+	double			dist;
 	void			*mlx;
 	void			*win;
 	char			**map;
@@ -71,7 +84,12 @@ typedef struct s_game
 	double			distances_y;
 	double			ray_angle;
 	double			angle;
+	t_ray			*x;
+	t_ray			*y;
+	double			hx;
+	double			hy;
 }					t_game;
+
 
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstclear(t_list **lst, void (*del)(void *));
