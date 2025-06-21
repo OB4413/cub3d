@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/06/19 17:53:57 by obarais          ###   ########.fr       */
+/*   Updated: 2025/06/20 09:18:34 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@
 # define FT_CLEAR 0
 # define MAX_LINES 100
 # define TILE 60
-# define MAP_WIDTH 800
+# define MAP_WIDTH 1000
 # define MAP_HEIGHT 600
 # define FOV (M_PI / 3)
+# define SPED 2
 
 typedef struct s_list
 {

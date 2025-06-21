@@ -6,16 +6,17 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/06/19 18:47:05 by obarais          ###   ########.fr       */
+/*   Updated: 2025/06/20 09:36:10 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int is_wall(double x, double y, t_game **game)
+int is_wall(double x, double y, t_game **game, char m)
 {
 	int map_x = (int)(x / TILE);
 	int map_y = (int)(y / TILE);
+	(void)m;
 
 	return ((*game)->map_section[map_y][map_x] == '1');
 }
@@ -137,7 +138,7 @@ double	dda(t_game **game)
 	the_distance_with_y(game, i);
 	the_distance_with_x(game, i);
 
-	if ((*game)->distances_x > (*game)->distances_y || !(*game)->distances_x)
+	if ((*game)->distances_x > (*game)->distances_y)
 	{
 		if (facing_down)
 			(*game)->char_color = 'h';
@@ -156,12 +157,12 @@ double	dda(t_game **game)
 	return ((*game)->distances_y);
 }
 
-void move_player11(t_game **game, double angle_offset)
+void move_player11(t_game **game, double angle_offset, char m)
 {
-    double nx = (*game)->player_x + cos((*game)->angle + angle_offset) * 2;
-    double ny = (*game)->player_y + sin((*game)->angle + angle_offset) * 2;
+    double nx = (*game)->player_x + cos((*game)->angle + angle_offset) * SPED;
+    double ny = (*game)->player_y + sin((*game)->angle + angle_offset) * SPED;
 
-    if (!is_wall(nx, ny, game))
+    if (!is_wall(nx, ny, game, m) && ny > 60.0 && nx > 60.0)
     {
         (*game)->player_x = nx;
         (*game)->player_y = ny;
@@ -172,30 +173,31 @@ void move_player11(t_game **game, double angle_offset)
 int	update_position_player(t_game **game)
 {
 	if ((*game)->keys[65363])
-		(*game)->angle -= 0.03;
-	else if ((*game)->keys[65361])
-		(*game)->angle += 0.03;
-	else if ((*game)->keys[119]) // W
-    	move_player11(game, 0);
-	else if ((*game)->keys[115]) // S
-    	move_player11(game, M_PI);
-	else if ((*game)->keys[100]) // D
-    	move_player11(game, -M_PI / 2);
-	else if ((*game)->keys[97]) // A
-		move_player11(game, M_PI / 2);
+		(*game)->angle += 0.04;
+	if ((*game)->keys[65361])
+		(*game)->angle -= 0.04;
+	if ((*game)->keys[119]) // W
+    	move_player11(game, 0, 'w');
+	if ((*game)->keys[115]) // S
+    	move_player11(game, M_PI, 's');
+	if ((*game)->keys[100]) // D
+    	move_player11(game, M_PI / 2, 'd');
+	if ((*game)->keys[97]) // A
+		move_player11(game, -M_PI / 2, 'a');
 	return (0);
 }
 
 void draw_column(t_game **game, int x, double dist)
 {
+	// printf("dist %f\n", dist);
 	int	color;
 	int wall_height;
 	double dis_projected_plan = (MAP_WIDTH / 2) / tan(FOV / 2);
 	double corrected_dist = dist * cos((*game)->ray_angle - (*game)->angle);
 
 	wall_height = (TILE / corrected_dist) * dis_projected_plan;
-	if (wall_height > MAP_HEIGHT)
-	wall_height = MAP_HEIGHT;
+	if (wall_height > MAP_HEIGHT || dist == 0.0)
+		wall_height = MAP_HEIGHT;
 	int start = (MAP_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
@@ -220,15 +222,17 @@ int raycasting(t_game **game)
 	update_position_player(game);
 	int x = 0;
 	double step = FOV / MAP_WIDTH;
-	(*game)->ray_angle = (*game)->angle + (FOV / 2);
+	(*game)->ray_angle = (*game)->angle - (FOV / 2);
 	while (x < MAP_WIDTH)
 	{
+		printf("px %f py %f\n", (*game)->player_x, (*game)->player_y);
 		normalize_angle(game);
 		(*game)->dist = ceil(dda(game));
 		draw_column(game, x, (*game)->dist);
-		(*game)->ray_angle -= step;
+		(*game)->ray_angle += step;
 		x++;
 	}
+	// printf("hhh\n");
 	return (0);
 }
 
@@ -274,6 +278,7 @@ int	release_key(int key, t_game **game)
 	(*game)->keys[key] = 0;
 	return (0);
 }
+
 void raycaster(t_game **game)
 {
 	(*game)->mlx = mlx_init();
