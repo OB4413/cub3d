@@ -129,21 +129,18 @@ void	the_distance_with_y(t_game **game, int i)
 
 double	dda(t_game **game)
 {
-	int i = 0;
 	int		facing_down = ((*game)->ray_angle > 0 && (*game)->ray_angle < M_PI);
 	int		facing_right = ((*game)->ray_angle < M_PI / 2 || (*game)->ray_angle > 3 * M_PI / 2);
 
-	while ((*game)->map_section[i])
-		i++;
-	the_distance_with_y(game, i);
-	the_distance_with_x(game, i);
+	the_distance_with_y(game, (*game)->i);
+	the_distance_with_x(game, (*game)->i);
 
 	if ((*game)->distances_x > (*game)->distances_y)
 	{
 		if (facing_down)
 			(*game)->char_color = 'h';
 		else
-			(*game)->char_color = 'K';
+			(*game)->char_color = 'k';
 		return ((*game)->distances_y);
 	}
 	else
@@ -162,7 +159,7 @@ void move_player11(t_game **game, double angle_offset, char m)
     double nx = (*game)->player_x + cos((*game)->angle + angle_offset) * SPED;
     double ny = (*game)->player_y + sin((*game)->angle + angle_offset) * SPED;
 
-    if (!is_wall(nx, ny, game, m) && ny > 60.0 && nx > 60.0)
+    if (!is_wall(nx, ny, game, m) && ny > TILE && nx > TILE)
     {
         (*game)->player_x = nx;
         (*game)->player_y = ny;
@@ -172,10 +169,14 @@ void move_player11(t_game **game, double angle_offset, char m)
 
 int	update_position_player(t_game **game)
 {
+	int x, y;
+
+	x = (*game)->player_x / TILE;
+	y = (*game)->player_y / TILE;
 	if ((*game)->keys[65363])
-		(*game)->angle += 0.04;
+		(*game)->angle += 0.02;
 	if ((*game)->keys[65361])
-		(*game)->angle -= 0.04;
+		(*game)->angle -= 0.02;
 	if ((*game)->keys[119]) // W
     	move_player11(game, 0, 'w');
 	if ((*game)->keys[115]) // S
@@ -184,12 +185,50 @@ int	update_position_player(t_game **game)
     	move_player11(game, M_PI / 2, 'd');
 	if ((*game)->keys[97]) // A
 		move_player11(game, -M_PI / 2, 'a');
+
+	(*game)->map_section[y][x] = '0';
+	x = (*game)->player_x / TILE;
+	y = (*game)->player_y / TILE;
+	(*game)->map_section[y][x] = (*game)->player_char;
 	return (0);
+}
+
+void	draw_minimap(t_game **g)
+{
+	int min_x = (*g)->player_x / TILE;
+	int min_y = (*g)->player_y / TILE;
+	int mintile = 10;
+
+	min_x = (min_x * mintile) - (MINMAP_WI / 2);
+	min_y = (min_y * mintile) - (MINMAP_HE / 2);
+	int i = min_x;
+	int j = min_y;
+	int x = 0;
+	int y = 0;
+	while (j <= min_y + MINMAP_HE && y < MINMAP_HE)
+	{
+		i = min_x;
+		x = 0;
+		while (i <= min_x + MINMAP_WI && x < MINMAP_WI)
+		{
+			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
+			if ((*g)->map_section[j / mintile][i / mintile] == '1')
+				*(unsigned int *)dst = 0xffffff;
+			else if ((*g)->map_section[j / mintile][i / mintile] == '0')
+				*(unsigned int *)dst = 0xff00ff;
+			else if ((j / mintile == (*g)->player_y / TILE) && (i / mintile == (*g)->player_x / TILE))
+				*(unsigned int *)dst = 0x000000;
+			i++;
+			x++;
+		}
+		y++;
+		j++;
+	}
+	mlx_put_image_to_window((*g)->mlx, (*g)->win, (*g)->imag, 5, 5);
 }
 
 void draw_column(t_game **game, int x, double dist)
 {
-	// printf("dist %f\n", dist);
 	int	color;
 	int wall_height;
 	double dis_projected_plan = (MAP_WIDTH / 2) / tan(FOV / 2);
@@ -215,6 +254,7 @@ void draw_column(t_game **game, int x, double dist)
 		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, color);
 	while (y < MAP_HEIGHT)
 		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0x444444);
+	// draw_minimap(game);
 }
 
 int raycasting(t_game **game)
@@ -225,14 +265,12 @@ int raycasting(t_game **game)
 	(*game)->ray_angle = (*game)->angle - (FOV / 2);
 	while (x < MAP_WIDTH)
 	{
-		printf("px %f py %f\n", (*game)->player_x, (*game)->player_y);
 		normalize_angle(game);
 		(*game)->dist = ceil(dda(game));
 		draw_column(game, x, (*game)->dist);
 		(*game)->ray_angle += step;
 		x++;
 	}
-	// printf("hhh\n");
 	return (0);
 }
 
@@ -295,12 +333,18 @@ void raycaster(t_game **game)
 		exit(1);
 	}
 
+	(*game)->i = 0;
+	while ((*game)->map_section[(*game)->i])
+		(*game)->i++;
+
 	change_line_to_null(game);
 	chose_the_angle_p(game);
 	(*game)->player_x *= TILE;
 	(*game)->player_y *= TILE;
 	(*game)->player_x += TILE / 2;
 	(*game)->player_y += TILE / 2;
+	(*game)->imag = mlx_new_image((*game)->mlx, MINMAP_WI, MINMAP_HE);
+	(*game)->d_imag = mlx_get_data_addr((*game)->imag, &(*game)->bits_per_pixel, &(*game)->size_line, &(*game)->endian);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);

@@ -29,11 +29,13 @@
 # define FT_ALLOC 1
 # define FT_CLEAR 0
 # define MAX_LINES 100
-# define TILE 60
+# define TILE 80
 # define MAP_WIDTH 1000
 # define MAP_HEIGHT 600
+#define MINMAP_WI (MAP_WIDTH / 6)
+#define MINMAP_HE (MAP_HEIGHT / 6)
 # define FOV (M_PI / 3)
-# define SPED 2
+# define SPED 4
 
 typedef struct s_list
 {
@@ -48,7 +50,8 @@ typedef struct s_ray {
 
 typedef struct s_game
 {
-	int				keys[75361];
+	int 			i;
+	int				keys[65365];
 	char 			char_color;
 	int				map_height;
 	int				bits_per_pixel;
