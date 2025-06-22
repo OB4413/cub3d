@@ -199,18 +199,35 @@ void	draw_minimap(t_game **g)
 	int min_y = (*g)->player_y / TILE;
 	int mintile = 10;
 
+	printf("minx %d miny %d\n", min_x, min_y);
 	min_x = (min_x * mintile) - (MINMAP_WI / 2);
 	min_y = (min_y * mintile) - (MINMAP_HE / 2);
-	int i = min_x;
-	int j = min_y;
 	int x = 0;
 	int y = 0;
+	if (min_x < 0 || min_y < 0)
+	{
+		if (min_x < 0)
+			min_x = 0;
+		if (min_y < 0)
+			min_y = 0;
+	}
+	if ((min_y + MINMAP_HE) / mintile > (*g)->i || (min_x + MINMAP_WI) / mintile > ftk_strlen((*g)->map_section[min_y/ mintile]))
+	{
+		if ((min_y + MINMAP_HE) / mintile > (*g)->i)
+			min_y -= (min_y + MINMAP_HE) - ((*g)->i * mintile);
+		if ((min_x + MINMAP_WI) / mintile > ftk_strlen((*g)->map_section[min_y/ mintile]))
+			min_x -= (min_x + MINMAP_WI) - (ftk_strlen((*g)->map_section[min_y/ mintile]) * mintile);
+	}
+	int i = min_x;
+	int j = min_y;
+	printf("j %d i %d\n", j, i);
 	while (j <= min_y + MINMAP_HE && y < MINMAP_HE)
 	{
 		i = min_x;
 		x = 0;
 		while (i <= min_x + MINMAP_WI && x < MINMAP_WI)
 		{
+			printf("--j %d --i %d\n", j, i);
 			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
 			if ((*g)->map_section[j / mintile][i / mintile] == '1')
 				*(unsigned int *)dst = 0xffffff;
@@ -271,6 +288,7 @@ int raycasting(t_game **game)
 		(*game)->ray_angle += step;
 		x++;
 	}
+	draw_minimap(game);
 	return (0);
 }
 
