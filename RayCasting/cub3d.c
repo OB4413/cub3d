@@ -199,7 +199,6 @@ void	draw_minimap(t_game **g)
 	int min_y = (*g)->player_y / TILE;
 	int mintile = 10;
 
-	printf("minx %d miny %d\n", min_x, min_y);
 	min_x = (min_x * mintile) - (MINMAP_WI / 2);
 	min_y = (min_y * mintile) - (MINMAP_HE / 2);
 	int x = 0;
@@ -220,20 +219,18 @@ void	draw_minimap(t_game **g)
 	}
 	int i = min_x;
 	int j = min_y;
-	printf("j %d i %d\n", j, i);
 	while (j <= min_y + MINMAP_HE && y < MINMAP_HE)
 	{
 		i = min_x;
 		x = 0;
 		while (i <= min_x + MINMAP_WI && x < MINMAP_WI)
 		{
-			printf("--j %d --i %d\n", j, i);
 			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
 			if ((*g)->map_section[j / mintile][i / mintile] == '1')
 				*(unsigned int *)dst = 0xffffff;
 			else if ((*g)->map_section[j / mintile][i / mintile] == '0')
 				*(unsigned int *)dst = 0xff00ff;
-			else if ((j / mintile == (*g)->player_y / TILE) && (i / mintile == (*g)->player_x / TILE))
+			else if ((*g)->map_section[j / mintile][i / mintile] == (*g)->player_char)
 				*(unsigned int *)dst = 0x000000;
 			i++;
 			x++;
@@ -266,12 +263,23 @@ void draw_column(t_game **game, int x, double dist)
 	else if ((*game)->char_color == 'y')
 		color = 0xFF5733;
 	while (y < start)
-		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0xb0d2fa);
+	{
+		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, 0xb0d2fa);
+		y++;
+	}
 	while (y < start + wall_height)
-		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, color);
+	{
+		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, color);
+		y++;
+	}
 	while (y < MAP_HEIGHT)
-		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0x444444);
-	// draw_minimap(game);
+	{
+		if ((y < 2 || y > 8 + MINMAP_HE) || (x < 2 || x > 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, 0x444444);
+		y++;
+	}
 }
 
 int raycasting(t_game **game)
