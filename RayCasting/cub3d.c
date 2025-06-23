@@ -197,7 +197,7 @@ void	draw_minimap(t_game **g)
 {
 	int min_x = (*g)->player_x / TILE;
 	int min_y = (*g)->player_y / TILE;
-	int mintile = 10;
+	int mintile = 8;
 
 	min_x = (min_x * mintile) - (MINMAP_WI / 2);
 	min_y = (min_y * mintile) - (MINMAP_HE / 2);
@@ -210,9 +210,9 @@ void	draw_minimap(t_game **g)
 		if (min_y < 0)
 			min_y = 0;
 	}
-	if ((min_y + MINMAP_HE) / mintile > (*g)->i || (min_x + MINMAP_WI) / mintile > ftk_strlen((*g)->map_section[min_y/ mintile]))
+	if ((min_y + MINMAP_HE) / mintile > (*g)->i - 1 || (min_x + MINMAP_WI) / mintile > ftk_strlen((*g)->map_section[min_y/ mintile]))
 	{
-		if ((min_y + MINMAP_HE) / mintile > (*g)->i)
+		if ((min_y + MINMAP_HE) / mintile > (*g)->i - 1)
 			min_y -= (min_y + MINMAP_HE) - ((*g)->i * mintile);
 		if ((min_x + MINMAP_WI) / mintile > ftk_strlen((*g)->map_section[min_y/ mintile]))
 			min_x -= (min_x + MINMAP_WI) - (ftk_strlen((*g)->map_section[min_y/ mintile]) * mintile);
@@ -226,11 +226,11 @@ void	draw_minimap(t_game **g)
 		while (i <= min_x + MINMAP_WI && x < MINMAP_WI)
 		{
 			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
-			if ((*g)->map_section[j / mintile][i / mintile] == '1')
+			if ((*g)->map_section[j / mintile] && (*g)->map_section[j / mintile][i / mintile] == '1')
 				*(unsigned int *)dst = 0xffffff;
-			else if ((*g)->map_section[j / mintile][i / mintile] == '0')
+			else if ( (*g)->map_section[j / mintile] && (*g)->map_section[j / mintile][i / mintile] == '0')
 				*(unsigned int *)dst = 0xff00ff;
-			else if ((*g)->map_section[j / mintile][i / mintile] == (*g)->player_char)
+			else
 				*(unsigned int *)dst = 0x000000;
 			i++;
 			x++;
