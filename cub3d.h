@@ -29,7 +29,8 @@
 # define FT_ALLOC 1
 # define FT_CLEAR 0
 # define MAX_LINES 100
-# define TILE 80
+# define TILE 60
+# define MINTILE 8
 # define MAP_WIDTH 1000
 # define MAP_HEIGHT 600
 #define MINMAP_WI (MAP_WIDTH / 6)
