@@ -192,6 +192,99 @@ int	update_position_player(t_game **game)
 	return (0);
 }
 
+void	draw_minimap(t_game **g)
+{
+	int min_x = (*g)->player_x / TILE;
+	int min_y = (*g)->player_y / TILE;
+
+	min_x = (min_x * MINTILE) - (MINMAP_WI / 2);
+	min_y = (min_y * MINTILE) - (MINMAP_HE / 2);
+	int x = 0;
+	int y = 0;
+	if (min_x < 0 || min_y < 0)
+	{
+		if (min_x < 0)
+			min_x = 0;
+		if (min_y < 0)
+			min_y = 0;
+	}
+	if ((min_y + MINMAP_HE) / MINTILE > (*g)->i - 1 || (min_x + MINMAP_WI) / MINTILE > ftk_strlen((*g)->map_section[min_y/ MINTILE]))
+	{
+		if ((min_y + MINMAP_HE) / MINTILE > (*g)->i - 1)
+		{
+			if (MINMAP_HE < (*g)->i * MINTILE)
+				min_y -= (min_y + MINMAP_HE) - ((*g)->i * MINTILE);
+		}
+		if ((min_x + MINMAP_WI) / MINTILE > ftk_strlen((*g)->map_section[min_y/ MINTILE]))
+		{
+			if (MINMAP_WI < ftk_strlen((*g)->map_section[min_y/ MINTILE]) * MINTILE)
+				min_x -= (min_x + MINMAP_WI) - (ftk_strlen((*g)->map_section[min_y/ MINTILE]) * MINTILE);
+		}
+	}
+	int i = min_x;
+	int j = min_y;
+	while (j <= min_y + MINMAP_HE && j < (*g)->i * MINTILE && y < MINMAP_HE)
+	{
+		i = min_x;
+		x = 0;
+		while (i <= min_x + MINMAP_WI && i < ftk_strlen((*g)->map_section[min_y/ MINTILE]) * MINTILE && x < MINMAP_WI)
+		{
+			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
+			if ((*g)->map_section[j / MINTILE] && (*g)->map_section[j / MINTILE][i / MINTILE] == '1')
+				*(unsigned int *)dst = 0xffffff;
+			else if ((*g)->map_section[j / MINTILE] && ((*g)->map_section[j / MINTILE][i / MINTILE] == '0' || (*g)->map_section[j / MINTILE][i / MINTILE] == (*g)->player_char))
+				*(unsigned int *)dst = 0xff00ff;
+			else
+				*(unsigned int *)dst = 0x000000;
+			i++;
+			x++;
+		}
+		y++;
+		j++;
+	}
+
+	double mi_x = (*g)->player_x / TILE;
+	double mi_y = (*g)->player_y / TILE;
+	int mn_x = (int)(mi_x * MINTILE) - min_x;
+	int mn_y = (int)(mi_y * MINTILE) - min_y;
+
+	int dy = -1;
+	int dx = -1;
+	int px, py;
+	while (dy <= 1)
+	{
+		dx = -1;
+		while (dx <= 1)
+		{
+			px = mn_x + dx;
+			py = mn_y + dy;
+			if (px >= 0 && px < MINMAP_WI && py >= 0 && py < MINMAP_HE)
+			{
+				char *dst = (*g)->d_imag + (py * (*g)->size_line + px * ((*g)->bits_per_pixel / 8));
+				*(unsigned int *)dst = 0x000000;
+			}
+			dx++;
+		}
+		dy++;
+	}
+
+	double dir_x = cos((*g)->angle);
+	double dir_y = sin((*g)->angle);
+	int k = 0;
+	while (k < 6)
+	{
+		px = mn_x + (int)(dir_x * k);
+		py = mn_y + (int)(dir_y * k);
+		if (px >= 0 && px < MINMAP_WI && py >= 0 && py < MINMAP_HE)
+		{
+			char *dst = (*g)->d_imag + (py * (*g)->size_line + px * ((*g)->bits_per_pixel / 8));
+			*(unsigned int *)dst = 0x000000;
+		}
+		k++;
+	}
+	mlx_put_image_to_window((*g)->mlx, (*g)->win, (*g)->imag, 5, 5);
+}
+
 void draw_column(t_game **game, int x, double dist)
 {
 	int	color;
@@ -214,11 +307,23 @@ void draw_column(t_game **game, int x, double dist)
 	else if ((*game)->char_color == 'y')
 		color = 0xFF5733;
 	while (y < start)
-		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0xb0d2fa);
+	{
+		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, 0xb0d2fa);
+		y++;
+	}
 	while (y < start + wall_height)
-			mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, color);
+	{
+		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, color);
+		y++;
+	}
 	while (y < MAP_HEIGHT)
-			mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0x444444);
+	{
+		if ((y < 2 || y > 8 + MINMAP_HE) || (x < 2 || x > 8 + MINMAP_WI))
+			mlx_pixel_put((*game)->mlx, (*game)->win, x, y, 0x444444);
+		y++;
+	}
 }
 
 int raycasting(t_game **game)
@@ -235,6 +340,7 @@ int raycasting(t_game **game)
 		(*game)->ray_angle += step;
 		x++;
 	}
+	draw_minimap(game);
 	return (0);
 }
 
