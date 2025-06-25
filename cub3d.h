@@ -31,12 +31,13 @@
 # define MAX_LINES 100
 # define TILE 60
 # define MINTILE 8
-# define MAP_WIDTH 1000
-# define MAP_HEIGHT 600
-#define MINMAP_WI (MAP_WIDTH / 6)
-#define MINMAP_HE (MAP_HEIGHT / 6)
+# define WIN_WIDTH 2000
+# define WIN_HEIGHT 1200
+#define MINMAP_WI (WIN_WIDTH / 6)
+#define MINMAP_HE (WIN_HEIGHT / 6)
 # define FOV (M_PI / 3)
-# define SPED 4
+# define SPED 10
+# define SPED_RL 0.03
 
 typedef struct s_list
 {
@@ -56,10 +57,15 @@ typedef struct s_game
 	char 			char_color;
 	int				map_height;
 	int				bits_per_pixel;
+	int				bpp;
 	int				size_line;
+	int				sl;
 	int				endian;
+	int				en;
 	void			*d_imag;
+	void			*d_imag_v;
 	void			*imag;
+	void			*imag_v;
 	double			dist;
 	void			*mlx;
 	void			*win;

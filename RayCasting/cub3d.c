@@ -173,9 +173,9 @@ int	update_position_player(t_game **game)
 	x = (*game)->player_x / TILE;
 	y = (*game)->player_y / TILE;
 	if ((*game)->keys[65363])
-		(*game)->angle += 0.02;
+		(*game)->angle += SPED_RL;
 	if ((*game)->keys[65361])
-		(*game)->angle -= 0.02;
+		(*game)->angle -= SPED_RL;
 	if ((*game)->keys[119]) // W
     	move_player11(game, 0);
 	if ((*game)->keys[115]) // S
@@ -194,15 +194,16 @@ int	update_position_player(t_game **game)
 
 void draw_column(t_game **game, int x, double dist)
 {
-	int	color;
+	unsigned int	color;
+	char *dst;
 	int wall_height;
-	double dis_projected_plan = (MAP_WIDTH / 2) / tan(FOV / 2);
+	double dis_projected_plan = (WIN_WIDTH / 2) / tan(FOV / 2);
 	double corrected_dist = dist * cos((*game)->ray_angle - (*game)->angle);
 
 	wall_height = (TILE / corrected_dist) * dis_projected_plan;
-	if (wall_height > MAP_HEIGHT || dist == 0.0)
-		wall_height = MAP_HEIGHT;
-	int start = (MAP_HEIGHT / 2) - (wall_height / 2);
+	if (wall_height > WIN_HEIGHT || dist == 0.0)
+		wall_height = WIN_HEIGHT;
+	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
 	if ((*game)->char_color == 'h')
@@ -214,20 +215,30 @@ void draw_column(t_game **game, int x, double dist)
 	else if ((*game)->char_color == 'y')
 		color = 0xFF5733;
 	while (y < start)
-		mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0xb0d2fa);
+	{
+		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
+		*(unsigned int *)dst = 0xb0d2fa;
+	}
 	while (y < start + wall_height)
-			mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, color);
-	while (y < MAP_HEIGHT)
-			mlx_pixel_put((*game)->mlx, (*game)->win, x, y++, 0x444444);
+	{
+		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
+		*(unsigned int *)dst = color;
+	}
+	while (y < WIN_HEIGHT)
+	{
+		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
+		*(unsigned int *)dst = 0x444444;
+	}
 }
 
 int raycasting(t_game **game)
 {
+	mlx_clear_window((*game)->mlx, (*game)->win);
 	update_position_player(game);
 	int x = 0;
-	double step = FOV / MAP_WIDTH;
+	double step = FOV / WIN_WIDTH;
 	(*game)->ray_angle = (*game)->angle - (FOV / 2);
-	while (x < MAP_WIDTH)
+	while (x < WIN_WIDTH)
 	{
 		normalize_angle(game);
 		(*game)->dist = ceil(dda(game));
@@ -235,6 +246,7 @@ int raycasting(t_game **game)
 		(*game)->ray_angle += step;
 		x++;
 	}
+	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	return (0);
 }
 
@@ -290,7 +302,7 @@ void raycaster(t_game **game)
 		exit(1);
 	}
 
-	(*game)->win = mlx_new_window((*game)->mlx, MAP_WIDTH, MAP_HEIGHT, "Cub3D");
+	(*game)->win = mlx_new_window((*game)->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3D");
 	if (!(*game)->win)
 	{
 		ft_putstr_fd("Error creating window\n", 2);
@@ -307,8 +319,8 @@ void raycaster(t_game **game)
 	(*game)->player_y *= TILE;
 	(*game)->player_x += TILE / 2;
 	(*game)->player_y += TILE / 2;
-	(*game)->imag = mlx_new_image((*game)->mlx, MINMAP_WI, MINMAP_HE);
-	(*game)->d_imag = mlx_get_data_addr((*game)->imag, &(*game)->bits_per_pixel, &(*game)->size_line, &(*game)->endian);
+	(*game)->imag_v = mlx_new_image((*game)->mlx, WIN_WIDTH, WIN_HEIGHT);
+	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
