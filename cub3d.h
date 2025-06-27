@@ -31,13 +31,13 @@
 # define MAX_LINES 100
 # define TILE 60
 # define MINTILE 8
-# define WIN_WIDTH 2000
-# define WIN_HEIGHT 1200
+# define WIN_WIDTH 1000
+# define WIN_HEIGHT 600
 #define MINMAP_WI (WIN_WIDTH / 6)
 #define MINMAP_HE (WIN_HEIGHT / 6)
 # define FOV (M_PI / 3)
-# define SPED 10
-# define SPED_RL 0.03
+# define SPED 1
+# define SPED_RL 0.009
 
 typedef struct s_list
 {
@@ -101,6 +101,11 @@ typedef struct s_game
 	t_ray			*y;
 	double			hx;
 	double			hy;
+	double			ya;
+	double			yb;
+	double			xa;
+	double			xb;
+	int				x_or_y;
 }					t_game;
 
 

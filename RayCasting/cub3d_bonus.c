@@ -17,6 +17,12 @@ int is_wall(double x, double y, t_game **game)
 	int map_x = (int)(x / TILE);
 	int map_y = (int)(y / TILE);
 
+	if ((*game)->map_section[map_y][map_x] == 'D')
+		return (1);
+	if ((*game)->map_section[map_y][map_x] == 'C')
+		return (0);
+	if ((*game)->map_section[map_y][map_x] != '0' && (*game)->map_section[map_y][map_x] != (*game)->player_char)
+		return (1);
 	return ((*game)->map_section[map_y][map_x] == '1');
 }
 
@@ -73,11 +79,13 @@ void	the_distance_with_x(t_game **game, int i)
 		int fx = ftk_strlen((*game)->map_section[map_y]);
 		if (map_x < 0 || map_x >= fx)
 			break;
-		if ((*game)->map_section[map_y][map_x] == '1')
+		if ((*game)->map_section[map_y][map_x] != '0' && (*game)->map_section[map_y][map_x] != 'C')
 			break;
 		xn += step_x;
 		yn += step_y;
 	}
+	(*game)->xa = yn;
+	(*game)->xb = xn;
 	distance = sqrt(pow(xn - (*game)->player_x, 2) + pow(yn - (*game)->player_y, 2));
 	(*game)->distances_x = distance;
 }
@@ -117,14 +125,40 @@ void	the_distance_with_y(t_game **game, int i)
 		int fx = ftk_strlen((*game)->map_section[map_y]);
 		if (map_x < 0 || map_x >= fx)
 			break;
-		if ((*game)->map_section[map_y][map_x] == '1')
+		if ((*game)->map_section[map_y][map_x] != '0' && (*game)->map_section[map_y][map_x] != 'C')
 			break;
 		xn += step_x;
 		yn += step_y;
 	}
+	(*game)->ya = yn;
+	(*game)->yb = xn;
 	distance = sqrt(pow(xn - (*game)->player_x, 2) + pow(yn - (*game)->player_y, 2));
 	(*game)->distances_y = distance;
 }
+
+
+int check_the_dor(t_game **g, double y, double x, int v)
+{
+	int	facing_down = ((*g)->ray_angle > 0 && (*g)->ray_angle < M_PI);
+	int	facing_right = ((*g)->ray_angle < M_PI / 2 || (*g)->ray_angle > 3 * M_PI / 2);
+
+	if (v)
+	{
+		if (!facing_right)
+			x -= TILE;
+	}
+	else
+	{
+		if (!facing_down)
+			y -= TILE;
+	}
+	int map_y = (int)(y / TILE);
+	int map_x = (int)(x / TILE);
+	if ((*g)->map_section[map_y][map_x] == 'D')
+		return (1);
+	return (0);
+}
+
 
 double	dda(t_game **game)
 {
@@ -136,7 +170,10 @@ double	dda(t_game **game)
 
 	if ((*game)->distances_x > (*game)->distances_y)
 	{
-		if (facing_down)
+		(*game)->x_or_y = 1;
+		if (check_the_dor(game, (*game)->ya, (*game)->yb, 0))
+			(*game)->char_color = 'd';
+		else if (facing_down)
 			(*game)->char_color = 'h';
 		else
 			(*game)->char_color = 'k';
@@ -144,7 +181,10 @@ double	dda(t_game **game)
 	}
 	else
 	{
-		if (facing_right)
+		(*game)->x_or_y = 0;
+		if (check_the_dor(game, (*game)->xa, (*game)->xb, 1))
+			(*game)->char_color = 'd';
+		else if (facing_right)
 			(*game)->char_color = 'x';
 		else
 			(*game)->char_color = 'y';
@@ -165,6 +205,43 @@ void move_player11(t_game **game, double angle_offset)
     }
 }
 
+void open_and_close_door(t_game **g)
+{
+	int x = 0;
+	int y = 0;
+
+	if ((*g)->x_or_y == 1)
+	{
+		x = (int)(*g)->yb;
+		y = (int)(*g)->ya;
+	}
+	else if ((*g)->x_or_y == 0)
+	{
+		x = (int)(*g)->xb;
+		y = (int)(*g)->xa;
+	}
+
+	int	facing_down = ((*g)->ray_angle > 0 && (*g)->ray_angle < M_PI);
+	int	facing_right = ((*g)->ray_angle < M_PI / 2 || (*g)->ray_angle > 3 * M_PI / 2);
+
+	if ((*g)->x_or_y == 0)
+	{
+		if (!facing_right)
+			x -= TILE;
+	}
+	else
+	{
+		if (!facing_down)
+			y -= TILE;
+	}
+
+	if ((*g)->map_section[(int)(*g)->player_y / TILE][(int)(*g)->player_x / TILE] == 'C')
+		return ;
+	if ((*g)->map_section[y / TILE][x / TILE] == 'D' && (*g)->char_color == 'd' && (*g)->dist < TILE)
+		(*g)->map_section[y / TILE][x / TILE] = 'C';
+	else if ((*g)->map_section[y / TILE][x / TILE] == 'C' && (*g)->dist < TILE)
+		(*g)->map_section[y / TILE][x / TILE] = 'D';
+}
 
 int	update_position_player(t_game **game)
 {
@@ -184,11 +261,16 @@ int	update_position_player(t_game **game)
     	move_player11(game, M_PI / 2);
 	if ((*game)->keys[97]) // A
 		move_player11(game, -M_PI / 2);
-
-	(*game)->map_section[y][x] = '0';
-	x = (*game)->player_x / TILE;
-	y = (*game)->player_y / TILE;
-	(*game)->map_section[y][x] = (*game)->player_char;
+	// if ((*game)->keys[101])
+	// 	open_and_close_door(game);
+	if ((*game)->map_section[y][x] != 'C' && (*game)->map_section[y][x] != 'D')
+	{
+		(*game)->map_section[y][x] = '0';
+		x = (*game)->player_x / TILE;
+		y = (*game)->player_y / TILE;
+		if ((*game)->map_section[y][x] != 'C' && (*game)->map_section[y][x] != 'D')
+			(*game)->map_section[y][x] = (*game)->player_char;
+	}
 	return (0);
 }
 
@@ -232,6 +314,8 @@ void	draw_minimap(t_game **g)
 			char *dst = (*g)->d_imag + (y * (*g)->size_line + x * ((*g)->bits_per_pixel / 8));
 			if ((*g)->map_section[j / MINTILE] && (*g)->map_section[j / MINTILE][i / MINTILE] == '1')
 				*(unsigned int *)dst = 0xffffff;
+			else if ((*g)->map_section[j / MINTILE] && ((*g)->map_section[j / MINTILE][i / MINTILE] == 'D' || (*g)->map_section[j / MINTILE][i / MINTILE] == 'C'))
+				*(unsigned int *)dst = 0xffff00;
 			else if ((*g)->map_section[j / MINTILE] && ((*g)->map_section[j / MINTILE][i / MINTILE] == '0' || (*g)->map_section[j / MINTILE][i / MINTILE] == (*g)->player_char))
 				*(unsigned int *)dst = 0xff00ff;
 			else
@@ -307,6 +391,8 @@ void draw_column(t_game **game, int x, double dist)
 		color = 0xFFC300;
 	else if ((*game)->char_color == 'y')
 		color = 0xFF5733;
+	else if ((*game)->char_color == 'd')
+		color = 0xFF00ad;
 	while (y < start)
 	{
 		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
@@ -350,7 +436,10 @@ int raycasting(t_game **game)
 		draw_column(game, x, (*game)->dist);
 		(*game)->ray_angle += step;
 		x++;
+		if ((*game)->keys[101])
+			open_and_close_door(game);
 	}
+	printf("pp %c\n", (*game)->map_section[(int)(*game)->player_y / TILE][(int)(*game)->player_x / TILE]);
 	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	draw_minimap(game);
 	return (0);
@@ -429,6 +518,7 @@ void raycaster(t_game **game)
 	(*game)->d_imag = mlx_get_data_addr((*game)->imag, &(*game)->bits_per_pixel, &(*game)->size_line, &(*game)->endian);
 	(*game)->imag_v = mlx_new_image((*game)->mlx, WIN_WIDTH, WIN_HEIGHT);
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
+
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
