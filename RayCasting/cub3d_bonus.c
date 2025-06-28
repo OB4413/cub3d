@@ -207,41 +207,22 @@ void move_player11(t_game **game, double angle_offset)
 
 void open_and_close_door(t_game **g)
 {
-	int x = 0;
-	int y = 0;
-
-	if ((*g)->x_or_y == 1)
-	{
-		x = (int)(*g)->yb;
-		y = (int)(*g)->ya;
-	}
-	else if ((*g)->x_or_y == 0)
-	{
-		x = (int)(*g)->xb;
-		y = (int)(*g)->xa;
-	}
-
-	int	facing_down = ((*g)->ray_angle > 0 && (*g)->ray_angle < M_PI);
-	int	facing_right = ((*g)->ray_angle < M_PI / 2 || (*g)->ray_angle > 3 * M_PI / 2);
-
-	if ((*g)->x_or_y == 0)
-	{
-		if (!facing_right)
-			x -= TILE;
-	}
-	else
-	{
-		if (!facing_down)
-			y -= TILE;
-	}
+	int px = (int)((*g)->player_x + cos((*g)->angle) * TILE) / TILE;
+	int py = (int)((*g)->player_y + sin((*g)->angle) * TILE) / TILE;
 
 	if ((*g)->map_section[(int)(*g)->player_y / TILE][(int)(*g)->player_x / TILE] == 'C')
 		return ;
-	if ((*g)->map_section[y / TILE][x / TILE] == 'D' && (*g)->char_color == 'd' && (*g)->dist < TILE)
-		(*g)->map_section[y / TILE][x / TILE] = 'C';
-	else if ((*g)->map_section[y / TILE][x / TILE] == 'C' && (*g)->dist < TILE)
-		(*g)->map_section[y / TILE][x / TILE] = 'D';
+
+	int dist_x = ((*g)->player_x / TILE) - px;
+	int dist_y = ((*g)->player_y / TILE) - py;
+	double dist = sqrt(dist_x * dist_x + dist_y * dist_y) * TILE;
+
+	if ((*g)->map_section[py][px] == 'D' && dist <= TILE)
+		(*g)->map_section[py][px] = 'C';
+	else if ((*g)->map_section[py][px] == 'C' && dist <= 2 * TILE)
+		(*g)->map_section[py][px] = 'D';
 }
+
 
 int	update_position_player(t_game **game)
 {
@@ -261,8 +242,7 @@ int	update_position_player(t_game **game)
     	move_player11(game, M_PI / 2);
 	if ((*game)->keys[97]) // A
 		move_player11(game, -M_PI / 2);
-	// if ((*game)->keys[101])
-	// 	open_and_close_door(game);
+
 	if ((*game)->map_section[y][x] != 'C' && (*game)->map_section[y][x] != 'D')
 	{
 		(*game)->map_section[y][x] = '0';
@@ -436,10 +416,7 @@ int raycasting(t_game **game)
 		draw_column(game, x, (*game)->dist);
 		(*game)->ray_angle += step;
 		x++;
-		if ((*game)->keys[101])
-			open_and_close_door(game);
 	}
-	printf("pp %c\n", (*game)->map_section[(int)(*game)->player_y / TILE][(int)(*game)->player_x / TILE]);
 	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	draw_minimap(game);
 	return (0);
@@ -479,6 +456,8 @@ int prees_key(int key, t_game **game)
 	if (key == 65307)
 		exit(0);
 	(*game)->keys[key] = 1;
+	if ((*game)->keys[101])
+			open_and_close_door(game);
 	return (0);
 }
 
