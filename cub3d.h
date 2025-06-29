@@ -36,8 +36,8 @@
 #define MINMAP_WI (WIN_WIDTH / 6)
 #define MINMAP_HE (WIN_HEIGHT / 6)
 # define FOV (M_PI / 3)
-# define SPED 1
-# define SPED_RL 0.009
+# define SPED 2
+# define SPED_RL 0.008
 
 typedef struct s_list
 {

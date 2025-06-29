@@ -467,6 +467,24 @@ int	release_key(int key, t_game **game)
 	return (0);
 }
 
+int	mouse_move(int x, int y, t_game **g)
+{
+	(void)y;
+	static int i = WIN_WIDTH / 2;
+	int j;
+
+	j = x - i;
+	if (j > 0)
+		(*g)->angle += j * SPED_RL;
+	else if (j < 0)
+	{
+		j *= -1;
+		(*g)->angle -= j * SPED_RL;
+	}
+	mlx_mouse_move((*g)->mlx, (*g)->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	return (0);
+}
+
 void raycaster(t_game **game)
 {
 	(*game)->mlx = mlx_init();
@@ -501,6 +519,7 @@ void raycaster(t_game **game)
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
+	mlx_hook((*game)->win, 6, 1L << 6, mouse_move, game);
 	mlx_loop_hook((*game)->mlx, raycasting, game);
 	mlx_hook((*game)->win, 17, 0, mlx_loop_end, (*game)->mlx);
 	mlx_loop((*game)->mlx);
