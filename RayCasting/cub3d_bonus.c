@@ -474,8 +474,7 @@ int raycasting(t_game **game)
 	drow_imag_player(game);
 	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	draw_minimap(game);
-	if (!(*game)->keys[113])
-		mlx_mouse_move((*game)->mlx, (*game)->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	mlx_mouse_move((*game)->mlx, (*game)->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	return (0);
 }
 
@@ -514,7 +513,7 @@ int prees_key(int key, t_game **game)
 		exit(0);
 	(*game)->keys[key] = 1;
 	if ((*game)->keys[101])
-			open_and_close_door(game);
+		open_and_close_door(game);
 	if ((*game)->keys[121])
 		change_the_gane(game);
 	return (0);
@@ -532,8 +531,6 @@ int	mouse_move(int x, int y, t_game **g)
 	static int i = WIN_WIDTH / 2;
 	int j;
 
-	if ((*g)->keys[113])
-		return (0);
 	j = x - i;
 	if (j > 0)
 		(*g)->angle += j * SPED_RL / 2;
