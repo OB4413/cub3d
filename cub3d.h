@@ -36,7 +36,7 @@
 #define MINMAP_WI (WIN_WIDTH / 6)
 #define MINMAP_HE (WIN_HEIGHT / 6)
 # define FOV (M_PI / 3)
-# define SPED 2
+# define SPED 1.5
 # define SPED_RL 0.008
 
 typedef struct s_list
@@ -52,6 +52,13 @@ typedef struct s_ray {
 
 typedef struct s_game
 {
+	void			**ak_imag;
+	void			**mg_imag;
+	void			**pst_imag;
+	void			*d_p_imag;
+	int				pbpp;
+	int				psl;
+	int				pend;
 	int 			i;
 	int				keys[65365];
 	char 			char_color;
