@@ -223,6 +223,12 @@ void open_and_close_door(t_game **g)
 		(*g)->map_section[py][px] = 'D';
 }
 
+void	change_the_gane(t_game **g)
+{
+	(*g)->ng++;
+	if ((*g)->ng == 3)
+		(*g)->ng = 0;
+}
 
 int	update_position_player(t_game **game)
 {
@@ -402,6 +408,54 @@ void draw_column(t_game **game, int x, double dist)
 	}
 }
 
+void	drow_imag_player(t_game **g)
+{
+	int x, y;
+	if ((*g)->ng == 0)
+		(*g)->d_p_imag = mlx_get_data_addr((*g)->pst_imag[(*g)->h], &(*g)->pbpp, &(*g)->psl, &(*g)->pend);
+	if ((*g)->ng == 1)
+		(*g)->d_p_imag = mlx_get_data_addr((*g)->ak_imag[(*g)->h], &(*g)->pbpp, &(*g)->psl, &(*g)->pend);
+	if ((*g)->ng == 2)
+		(*g)->d_p_imag = mlx_get_data_addr((*g)->mg_imag[(*g)->h], &(*g)->pbpp, &(*g)->psl, &(*g)->pend);
+
+	x = 0;
+	y = 0;
+	while (y <= WIN_HEIGHT)
+	{
+		x = 0;
+		while (x <= WIN_WIDTH)
+		{
+			char *dst = (*g)->d_p_imag + (y * (*g)->psl + x * ((*g)->pbpp / 8));
+			if (*(unsigned int *)dst != 0x01fefe)
+			{
+				char *st = (*g)->d_imag_v + (y * (*g)->sl + x * ((*g)->bpp / 8));
+				*(unsigned int *)st = *(unsigned int *)dst;
+			}
+			x++;
+		}
+		y++;
+	}
+	if ((*g)->shot == 1)
+	{
+		(*g)->h++;
+		if ((*g)->ng == 0)
+		{
+			if ((*g)->pst_imag[(*g)->h] == NULL)
+				(*g)->h = 0;
+		}
+		if ((*g)->ng == 1)
+		{
+			if ((*g)->ak_imag[(*g)->h] == NULL)
+				(*g)->h = 0;
+		}
+		if ((*g)->ng == 2)
+		{
+			if ((*g)->mg_imag[(*g)->h] == NULL)
+				(*g)->h = 0;
+		}
+	}
+}
+
 int raycasting(t_game **game)
 {
 	mlx_clear_window((*game)->mlx, (*game)->win);
@@ -417,6 +471,7 @@ int raycasting(t_game **game)
 		(*game)->ray_angle += step;
 		x++;
 	}
+	drow_imag_player(game);
 	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	draw_minimap(game);
 	if (!(*game)->keys[113])
@@ -460,6 +515,8 @@ int prees_key(int key, t_game **game)
 	(*game)->keys[key] = 1;
 	if ((*game)->keys[101])
 			open_and_close_door(game);
+	if ((*game)->keys[121])
+		change_the_gane(game);
 	return (0);
 }
 
@@ -492,25 +549,53 @@ void	init_imag_player(t_game **g)
 {
 	(*g)->pst_imag = malloc(sizeof(void *) * 5);
 	(*g)->mg_imag = malloc(sizeof(void *) * 5);
-	(*g)->ak_imag = malloc(sizeof(void *) * 4);
+	(*g)->ak_imag = malloc(sizeof(void *) * 5);
 	int x, y;
 
 	(*g)->pst_imag[0] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/1.xpm", &x, &y);
 	(*g)->pst_imag[1] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/2.xpm", &x, &y);
 	(*g)->pst_imag[2] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/3.xpm", &x, &y);
 	(*g)->pst_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/4.xpm", &x, &y);
-	(*g)->pst_imag[0] = NULL;
-
-	(*g)->pst_imag[0] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/1.xpm", &x, &y);
-	(*g)->pst_imag[1] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/2.xpm", &x, &y);
-	(*g)->pst_imag[2] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/3.xpm", &x, &y);
-	(*g)->pst_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/4.xpm", &x, &y);
 	(*g)->pst_imag[4] = NULL;
+
+	(*g)->mg_imag[0] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/1.xpm", &x, &y);
+	(*g)->mg_imag[1] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/2.xpm", &x, &y);
+	(*g)->mg_imag[2] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/3.xpm", &x, &y);
+	(*g)->mg_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/mg/4.xpm", &x, &y);
+	(*g)->mg_imag[4] = NULL;
 
 	(*g)->ak_imag[0] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/1.xpm", &x, &y);
 	(*g)->ak_imag[1] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/2.xpm", &x, &y);
 	(*g)->ak_imag[2] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/3.xpm", &x, &y);
-	(*g)->ak_imag[3] = NULL;
+	(*g)->ak_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/4.xpm", &x, &y);
+	(*g)->ak_imag[4] = NULL;
+
+	(*g)->ng = 0;
+	(*g)->shot = 0;
+	(*g)->h = 0;
+}
+
+int	shot_gun(int butom, int x, int y, t_game **game)
+{
+	(void)x;
+	(void)y;
+
+	if (butom == 1)
+		(*game)->shot = 1;
+	return (0);
+}
+
+int	stop_gun(int butom, int x, int y, t_game **game)
+{
+	(void)x;
+	(void)y;
+
+	if (butom == 1)
+	{
+		(*game)->shot = 0;
+		(*game)->h = 0;
+	}
+	return (0);
 }
 
 void raycaster(t_game **game)
@@ -548,7 +633,9 @@ void raycaster(t_game **game)
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
+	mlx_hook((*game)->win, 5, 1L << 3, stop_gun, game);
 	mlx_hook((*game)->win, 6, 1L << 6, mouse_move, game);
+	mlx_mouse_hook((*game)->win, shot_gun, game);
 	mlx_loop_hook((*game)->mlx, raycasting, game);
 	mlx_hook((*game)->win, 17, 0, mlx_loop_end, (*game)->mlx);
 	mlx_loop((*game)->mlx);

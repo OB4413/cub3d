@@ -113,6 +113,9 @@ typedef struct s_game
 	double			xa;
 	double			xb;
 	int				x_or_y;
+	int				ng;
+	int				shot;
+	int				h;
 }					t_game;
 
 
