@@ -165,6 +165,18 @@ void move_player11(t_game **game, double angle_offset)
     }
 }
 
+int	shot_gun(t_game **game)
+{
+	(*game)->shot = 1;
+	return (0);
+}
+
+int	stop_gun(t_game **game)
+{
+	(*game)->shot = 0;
+	(*game)->h = 0;
+	return (0);
+}
 
 int	update_position_player(t_game **game)
 {
@@ -231,6 +243,36 @@ void draw_column(t_game **game, int x, double dist)
 	}
 }
 
+void	drow_imag_player(t_game **g)
+{
+	int x, y;
+	(*g)->d_p_imag = mlx_get_data_addr((*g)->pst_imag[(*g)->h], &(*g)->pbpp, &(*g)->psl, &(*g)->pend);
+
+	x = 0;
+	y = 0;
+	while (y <= WIN_HEIGHT)
+	{
+		x = 0;
+		while (x <= WIN_WIDTH)
+		{
+			char *dst = (*g)->d_p_imag + (y * (*g)->psl + x * ((*g)->pbpp / 8));
+			if (*(unsigned int *)dst != 0x01fefe)
+			{
+				char *st = (*g)->d_imag_v + (y * (*g)->sl + x * ((*g)->bpp / 8));
+				*(unsigned int *)st = *(unsigned int *)dst;
+			}
+			x++;
+		}
+		y++;
+	}
+	if ((*g)->shot == 1)
+	{
+		(*g)->h++;
+		if ((*g)->pst_imag[(*g)->h] == NULL)
+			(*g)->h = 0;
+	}
+}
+
 int raycasting(t_game **game)
 {
 	mlx_clear_window((*game)->mlx, (*game)->win);
@@ -246,6 +288,7 @@ int raycasting(t_game **game)
 		(*game)->ray_angle += step;
 		x++;
 	}
+	drow_imag_player(game);
 	mlx_put_image_to_window((*game)->mlx, (*game)->win, (*game)->imag_v, 0, 0);
 	return (0);
 }
@@ -284,14 +327,36 @@ int prees_key(int key, t_game **game)
 	if (key == 65307)
 		exit(0);
 	(*game)->keys[key] = 1;
+	if ((*game)->keys[32])
+		shot_gun(game);
 	return (0);
 }
 
 int	release_key(int key, t_game **game)
 {
 	(*game)->keys[key] = 0;
+	if (!(*game)->keys[32])
+		stop_gun(game);
 	return (0);
 }
+
+void	init_imag_player(t_game **g)
+{
+	(*g)->pst_imag = malloc(sizeof(void *) * 5);
+	(*g)->mg_imag = malloc(sizeof(void *) * 5);
+	(*g)->ak_imag = malloc(sizeof(void *) * 5);
+	int x, y;
+
+	(*g)->pst_imag[0] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/1.xpm", &x, &y);
+	(*g)->pst_imag[1] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/2.xpm", &x, &y);
+	(*g)->pst_imag[2] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/3.xpm", &x, &y);
+	(*g)->pst_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/4.xpm", &x, &y);
+	(*g)->pst_imag[4] = NULL;
+
+	(*g)->shot = 0;
+	(*g)->h = 0;
+}
+
 
 void raycaster(t_game **game)
 {
@@ -321,6 +386,7 @@ void raycaster(t_game **game)
 	(*game)->player_y += TILE / 2;
 	(*game)->imag_v = mlx_new_image((*game)->mlx, WIN_WIDTH, WIN_HEIGHT);
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
+	init_imag_player(game);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);

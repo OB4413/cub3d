@@ -411,6 +411,7 @@ void draw_column(t_game **game, int x, double dist)
 void	drow_imag_player(t_game **g)
 {
 	int x, y;
+	static int n = 0;
 	if ((*g)->ng == 0)
 		(*g)->d_p_imag = mlx_get_data_addr((*g)->pst_imag[(*g)->h], &(*g)->pbpp, &(*g)->psl, &(*g)->pend);
 	if ((*g)->ng == 1)
@@ -437,7 +438,11 @@ void	drow_imag_player(t_game **g)
 	}
 	if ((*g)->shot == 1)
 	{
-		(*g)->h++;
+		if (n == 2)
+		{
+			n = 0;
+			(*g)->h++;
+		}
 		if ((*g)->ng == 0)
 		{
 			if ((*g)->pst_imag[(*g)->h] == NULL)
@@ -453,6 +458,7 @@ void	drow_imag_player(t_game **g)
 			if ((*g)->mg_imag[(*g)->h] == NULL)
 				(*g)->h = 0;
 		}
+		n++;
 	}
 }
 
