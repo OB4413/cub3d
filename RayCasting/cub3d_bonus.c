@@ -203,6 +203,15 @@ void move_player11(t_game **game, double angle_offset)
         (*game)->player_x = nx;
         (*game)->player_y = ny;
     }
+	else
+	{
+		nx = (*game)->player_x + cos((*game)->angle + angle_offset) * SPED / 2;
+		ny = (*game)->player_y + sin((*game)->angle + angle_offset) * SPED / 2;
+		if (!is_wall((*game)->player_x, ny, game) && ny > TILE)
+			(*game)->player_y = ny;
+		else if (!is_wall(nx, (*game)->player_y, game) && nx > TILE)
+			(*game)->player_x = nx;
+	}
 }
 
 void open_and_close_door(t_game **g)
@@ -219,7 +228,7 @@ void open_and_close_door(t_game **g)
 
 	if ((*g)->map_section[py][px] == 'D' && dist <= TILE)
 		(*g)->map_section[py][px] = 'C';
-	else if ((*g)->map_section[py][px] == 'C' && dist <= 2 * TILE)
+	else if ((*g)->map_section[py][px] == 'C' && dist <= TILE)
 		(*g)->map_section[py][px] = 'D';
 }
 
