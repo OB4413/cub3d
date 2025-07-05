@@ -38,6 +38,7 @@
 # define FOV (M_PI / 3)
 # define SPED 1.5
 # define SPED_RL 0.008
+# define STEP (FOV / WIN_WIDTH)
 
 typedef struct s_list
 {
@@ -116,11 +117,16 @@ typedef struct s_game
 	int				ng;
 	int				shot;
 	int				h;
+	void			*n_image;
+	void			*s_image;
+	void			*e_image;
+	void			*w_image;
 }					t_game;
 
 
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstclear(t_list **lst, void (*del)(void *));
+char				*ft_itoa(int n);
 t_list				*ft_lstnew(void *content);
 char				**ft_split2(char *str, char *charset);
 char				*ft_strcpy(char *dest, char const *src);

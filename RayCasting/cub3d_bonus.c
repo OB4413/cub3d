@@ -174,9 +174,9 @@ double	dda(t_game **game)
 		if (check_the_dor(game, (*game)->ya, (*game)->yb, 0))
 			(*game)->char_color = 'd';
 		else if (facing_down)
-			(*game)->char_color = 'h';
+			(*game)->char_color = 'n';
 		else
-			(*game)->char_color = 'k';
+			(*game)->char_color = 's';
 		return ((*game)->distances_y);
 	}
 	else
@@ -185,9 +185,9 @@ double	dda(t_game **game)
 		if (check_the_dor(game, (*game)->xa, (*game)->xb, 1))
 			(*game)->char_color = 'd';
 		else if (facing_right)
-			(*game)->char_color = 'x';
+			(*game)->char_color = 'w';
 		else
-			(*game)->char_color = 'y';
+			(*game)->char_color = 'e';
 		return ((*game)->distances_x);
 	}
 	return ((*game)->distances_y);
@@ -378,13 +378,13 @@ void draw_column(t_game **game, int x, double dist)
 	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
-	if ((*game)->char_color == 'h')
+	if ((*game)->char_color == 'n')
 		color = 0xC70039;
-	else if ((*game)->char_color == 'k')
+	else if ((*game)->char_color == 's')
 		color = 0xDAF7A6;
-	else if ((*game)->char_color == 'x')
+	else if ((*game)->char_color == 'e')
 		color = 0xFFC300;
-	else if ((*game)->char_color == 'y')
+	else if ((*game)->char_color == 'w')
 		color = 0xFF5733;
 	else if ((*game)->char_color == 'd')
 		color = 0xFF00ad;
@@ -471,8 +471,39 @@ void	drow_imag_player(t_game **g)
 	}
 }
 
+int	loop_chose_gun(t_game **g)
+{
+	static int i = 0;
+	static void *ch_gu = NULL;
+	int x, y;
+	char *file;
+
+	if (ch_gu)
+		mlx_destroy_image((*g)->mlx, ch_gu);
+
+	file = ft_strjoin("textures/chose_gun/", ft_strjoin(ft_itoa(i), ".xpm"));
+	ch_gu = mlx_xpm_file_to_image((*g)->mlx, file, &x, &y);
+	free(file);
+
+	mlx_clear_window((*g)->mlx, (*g)->win);
+	mlx_put_image_to_window((*g)->mlx, (*g)->win, ch_gu, 0, 0);
+	mlx_string_put((*g)->mlx, (*g)->win, 420, 450, 0xff0f, "chose the gun");
+	mlx_string_put((*g)->mlx, (*g)->win, 421, 450, 0xff0f, "chose the gun");
+	usleep(200000);
+
+	if (i == 13)
+		i = 0;
+	i++;
+	return (0);
+}
+
 int raycasting(t_game **game)
 {
+	if ((*game)->ng == 4)
+	{
+		loop_chose_gun(game);
+		return (0);
+	}
 	mlx_clear_window((*game)->mlx, (*game)->win);
 	update_position_player(game);
 	int x = 0;
@@ -531,6 +562,8 @@ int prees_key(int key, t_game **game)
 		open_and_close_door(game);
 	if ((*game)->keys[121])
 		change_the_gane(game);
+	if ((*game)->keys[113])
+		(*game)->ng = 4;
 	return (0);
 }
 
@@ -582,16 +615,34 @@ void	init_imag_player(t_game **g)
 	(*g)->ak_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/4.xpm", &x, &y);
 	(*g)->ak_imag[4] = NULL;
 
-	(*g)->ng = 0;
+	(*g)->n_image = mlx_xpm_file_to_image((*g)->mlx, "textures/n.xpm", &x, &y);
+	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/s.xpm", &x, &y);
+	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/e.xpm", &x, &y);
+	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/w.xpm", &x, &y);
+
+	(*g)->ng = 4;
 	(*g)->shot = 0;
 	(*g)->h = 0;
 }
 
 int	shot_gun(int butom, int x, int y, t_game **game)
 {
-	(void)x;
-	(void)y;
-
+	if ((*game)->ng == 4)
+	{
+		if (butom == 1)
+		{
+			if (y >= 428)
+			{
+				if (x >= 700)
+					(*game)->ng = 0;
+				else if (x >= 285)
+					(*game)->ng = 1;
+				else if (x >= 0)
+					(*game)->ng = 2;
+			}
+		}
+		return (0);
+	}
 	if (butom == 1)
 		(*game)->shot = 1;
 	return (0);
@@ -642,6 +693,12 @@ void raycaster(t_game **game)
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
 	init_imag_player(game);
 
+	int x, y;
+	void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
+
+	mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
+	sleep(5);
+	mlx_destroy_image((*game)->mlx, image);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
