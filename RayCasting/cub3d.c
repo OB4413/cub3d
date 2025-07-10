@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/06/20 09:36:10 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/10 10:22:21 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	the_distance_with_x(t_game **game, int i)
 		xn += step_x;
 		yn += step_y;
 	}
+	(*game)->xa = yn;
+	(*game)->xb = xn;
 	distance = sqrt(pow(xn - (*game)->player_x, 2) + pow(yn - (*game)->player_y, 2));
 	(*game)->distances_x = distance;
 }
@@ -122,6 +124,8 @@ void	the_distance_with_y(t_game **game, int i)
 		xn += step_x;
 		yn += step_y;
 	}
+	(*game)->ya = yn;
+	(*game)->yb = xn;
 	distance = sqrt(pow(xn - (*game)->player_x, 2) + pow(yn - (*game)->player_y, 2));
 	(*game)->distances_y = distance;
 }
@@ -136,18 +140,20 @@ double	dda(t_game **game)
 
 	if ((*game)->distances_x > (*game)->distances_y)
 	{
+		(*game)->ofs_tex = fmod((*game)->yb, (double)TILE);
 		if (facing_down)
-			(*game)->char_color = 'h';
+			(*game)->char_color = 'n';
 		else
-			(*game)->char_color = 'k';
+			(*game)->char_color = 's';
 		return ((*game)->distances_y);
 	}
 	else
 	{
+		(*game)->ofs_tex = fmod((*game)->xa, (double)TILE);
 		if (facing_right)
-			(*game)->char_color = 'x';
+			(*game)->char_color = 'w';
 		else
-			(*game)->char_color = 'y';
+			(*game)->char_color = 'e';
 		return ((*game)->distances_x);
 	}
 	return ((*game)->distances_y);
@@ -204,9 +210,8 @@ int	update_position_player(t_game **game)
 	return (0);
 }
 
-void draw_column(t_game **game, int x, double dist)
+void draw_image(t_game **game, int x, double dist)
 {
-	unsigned int	color;
 	char *dst;
 	int wall_height;
 	double dis_projected_plan = (WIN_WIDTH / 2) / tan(FOV / 2);
@@ -218,24 +223,40 @@ void draw_column(t_game **game, int x, double dist)
 	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
-	if ((*game)->char_color == 'h')
-		color = 0xC70039;
-	else if ((*game)->char_color == 'k')
-		color = 0xDAF7A6;
-	else if ((*game)->char_color == 'x')
-		color = 0xFFC300;
-	else if ((*game)->char_color == 'y')
-		color = 0xFF5733;
+	(*game)->wall_height = wall_height;
+	if ((*game)->char_color == 'n')
+	{
+		(*game)->imag_height = (*game)->yn;
+		(*game)->imag_width = (*game)->xn;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->n_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
+	else if ((*game)->char_color == 's')
+	{
+		(*game)->imag_height = (*game)->ys;
+		(*game)->imag_width = (*game)->xs;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->s_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
+	else if ((*game)->char_color == 'e')
+	{
+		(*game)->imag_height = (*game)->ye;
+		(*game)->imag_width = (*game)->xe;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->e_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
+	else if ((*game)->char_color == 'w')
+	{
+		(*game)->imag_height = (*game)->yw;
+		(*game)->imag_width = (*game)->xw;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->w_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	while (y < start)
 	{
 		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
 		*(unsigned int *)dst = 0xb0d2fa;
 	}
-	while (y < start + wall_height)
-	{
-		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
-		*(unsigned int *)dst = color;
-	}
+	if (wall_height >= (*game)->imag_height)
+		wall_height_imag(game, x,  &y, start);
+	else
+		imag_height_wall(game, x, &y, start);
 	while (y < WIN_HEIGHT)
 	{
 		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
@@ -284,7 +305,7 @@ int raycasting(t_game **game)
 	{
 		normalize_angle(game);
 		(*game)->dist = ceil(dda(game));
-		draw_column(game, x, (*game)->dist);
+		draw_image(game, x, (*game)->dist);
 		(*game)->ray_angle += step;
 		x++;
 	}
@@ -353,7 +374,13 @@ void	init_imag_player(t_game **g)
 	(*g)->pst_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/pistol/4.xpm", &x, &y);
 	(*g)->pst_imag[4] = NULL;
 
+	(*g)->n_image = mlx_xpm_file_to_image((*g)->mlx, "textures/N.xpm", &(*g)->xn, &(*g)->yn);
+	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/S.xpm", &(*g)->xs, &(*g)->ys);
+	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/E.xpm", &(*g)->xe, &(*g)->ye);
+	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/W.xpm", &(*g)->xw, &(*g)->yw);
+
 	(*g)->shot = 0;
+	(*g)->ng = 5;
 	(*g)->h = 0;
 }
 

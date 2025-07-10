@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/06/20 09:18:34 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/10 10:18:08 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define FT_ALLOC 1
 # define FT_CLEAR 0
 # define MAX_LINES 100
-# define TILE 60
+# define TILE 64
 # define MINTILE 8
 # define WIN_WIDTH 1000
 # define WIN_HEIGHT 600
@@ -72,6 +72,7 @@ typedef struct s_game
 	int				en;
 	void			*d_imag;
 	void			*d_imag_v;
+	void			*d_nsew;
 	void			*imag;
 	void			*imag_v;
 	double			dist;
@@ -118,9 +119,21 @@ typedef struct s_game
 	int				shot;
 	int				h;
 	void			*n_image;
+	int				yn;
+	int				xn;
 	void			*s_image;
+	int				ys;
+	int				xs;
 	void			*e_image;
+	int				ye;
+	int				xe;
 	void			*w_image;
+	int				yw;
+	int				xw;
+	int				imag_height;
+	int				imag_width;
+	int				wall_height;
+	double				ofs_tex;
 }					t_game;
 
 
@@ -173,5 +186,7 @@ void				process_anim(t_game *game, int *config_count, char *line,
 void				process_key(t_game *game, int *config_count, char *line,
 						int *flags);
 void				raycaster(t_game **game);
+void				wall_height_imag(t_game **g, int x, int *y, int start);
+void				imag_height_wall(t_game **g, int x, int *y, int start);
 
 #endif

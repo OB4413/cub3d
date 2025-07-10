@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/06/20 09:36:10 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/10 16:12:25 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ double	dda(t_game **game)
 
 	if ((*game)->distances_x > (*game)->distances_y)
 	{
+		(*game)->ofs_tex = fmod((*game)->yb, (double)TILE);
 		(*game)->x_or_y = 1;
 		if (check_the_dor(game, (*game)->ya, (*game)->yb, 0))
 			(*game)->char_color = 'd';
@@ -181,6 +182,7 @@ double	dda(t_game **game)
 	}
 	else
 	{
+		(*game)->ofs_tex = fmod((*game)->xa, (double)TILE);
 		(*game)->x_or_y = 0;
 		if (check_the_dor(game, (*game)->xa, (*game)->xb, 1))
 			(*game)->char_color = 'd';
@@ -310,7 +312,7 @@ void	draw_minimap(t_game **g)
 			if ((*g)->map_section[j / MINTILE] && (*g)->map_section[j / MINTILE][i / MINTILE] == '1')
 				*(unsigned int *)dst = 0xffffff;
 			else if ((*g)->map_section[j / MINTILE] && ((*g)->map_section[j / MINTILE][i / MINTILE] == 'D' || (*g)->map_section[j / MINTILE][i / MINTILE] == 'C'))
-				*(unsigned int *)dst = 0xffff00;
+				*(unsigned int *)dst = 0xff0000;
 			else if ((*g)->map_section[j / MINTILE] && ((*g)->map_section[j / MINTILE][i / MINTILE] == '0' || (*g)->map_section[j / MINTILE][i / MINTILE] == (*g)->player_char))
 				*(unsigned int *)dst = 0xff00ff;
 			else
@@ -364,9 +366,8 @@ void	draw_minimap(t_game **g)
 	mlx_put_image_to_window((*g)->mlx, (*g)->win, (*g)->imag, 5, 5);
 }
 
-void draw_column(t_game **game, int x, double dist)
+void draw_imag(t_game **game, int x, double dist)
 {
-	int	color;
 	char *dst;
 	int wall_height;
 	double dis_projected_plan = (WIN_WIDTH / 2) / tan(FOV / 2);
@@ -378,16 +379,37 @@ void draw_column(t_game **game, int x, double dist)
 	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
+	(*game)->wall_height = wall_height;
 	if ((*game)->char_color == 'n')
-		color = 0xC70039;
+	{
+		(*game)->imag_height = (*game)->yn;
+		(*game)->imag_width = (*game)->xn;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->n_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	else if ((*game)->char_color == 's')
-		color = 0xDAF7A6;
+	{
+		(*game)->imag_height = (*game)->ys;
+		(*game)->imag_width = (*game)->xs;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->s_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	else if ((*game)->char_color == 'e')
-		color = 0xFFC300;
+	{
+		(*game)->imag_height = (*game)->ye;
+		(*game)->imag_width = (*game)->xe;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->e_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	else if ((*game)->char_color == 'w')
-		color = 0xFF5733;
+	{
+		(*game)->imag_height = (*game)->yw;
+		(*game)->imag_width = (*game)->xw;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->w_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	else if ((*game)->char_color == 'd')
-		color = 0xFF00ad;
+	{
+		(*game)->imag_height = (*game)->ys;
+		(*game)->imag_width = (*game)->xs;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->s_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+	}
 	while (y < start)
 	{
 		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
@@ -397,15 +419,10 @@ void draw_column(t_game **game, int x, double dist)
 		}
 		y++;
 	}
-	while (y < start + wall_height)
-	{
-		if ((y < 2 || y >= 8 + MINMAP_HE) || (x < 2 || x >= 8 + MINMAP_WI))
-		{
-			dst = (*game)->d_imag_v + (y * (*game)->sl + x *((*game)->bpp / 8));
-			*(unsigned int *)dst = color;
-		}
-		y++;
-	}
+	if (wall_height >= (*game)->imag_height)
+		wall_height_imag(game, x, &y, start);
+	else
+		imag_height_wall(game, x, &y, start);
 	while (y < WIN_HEIGHT)
 	{
 		if ((y < 2 || y > 8 + MINMAP_HE) || (x < 2 || x > 8 + MINMAP_WI))
@@ -489,7 +506,7 @@ int	loop_chose_gun(t_game **g)
 	mlx_put_image_to_window((*g)->mlx, (*g)->win, ch_gu, 0, 0);
 	mlx_string_put((*g)->mlx, (*g)->win, 420, 450, 0xff0f, "chose the gun");
 	mlx_string_put((*g)->mlx, (*g)->win, 421, 450, 0xff0f, "chose the gun");
-	usleep(200000);
+	usleep(180000);
 
 	if (i == 13)
 		i = 0;
@@ -513,7 +530,7 @@ int raycasting(t_game **game)
 	{
 		normalize_angle(game);
 		(*game)->dist = ceil(dda(game));
-		draw_column(game, x, (*game)->dist);
+		draw_imag(game, x, (*game)->dist);
 		(*game)->ray_angle += step;
 		x++;
 	}
@@ -615,10 +632,10 @@ void	init_imag_player(t_game **g)
 	(*g)->ak_imag[3] = mlx_xpm_file_to_image((*g)->mlx, "textures/player/AK/4.xpm", &x, &y);
 	(*g)->ak_imag[4] = NULL;
 
-	(*g)->n_image = mlx_xpm_file_to_image((*g)->mlx, "textures/n.xpm", &x, &y);
-	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/s.xpm", &x, &y);
-	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/e.xpm", &x, &y);
-	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/w.xpm", &x, &y);
+	(*g)->n_image = mlx_xpm_file_to_image((*g)->mlx, "textures/N.xpm", &(*g)->xn, &(*g)->yn);
+	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/S.xpm", &(*g)->xs, &(*g)->ys);
+	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/E.xpm", &(*g)->xe, &(*g)->ye);
+	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/W.xpm", &(*g)->xw, &(*g)->yw);
 
 	(*g)->ng = 4;
 	(*g)->shot = 0;
