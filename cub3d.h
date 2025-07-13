@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/07/10 10:18:08 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/13 09:18:06 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,13 @@ typedef struct s_game
 	void			*w_image;
 	int				yw;
 	int				xw;
+	void			*wall_imag;
 	int				imag_height;
 	int				imag_width;
 	int				wall_height;
-	double				ofs_tex;
+	double			ofs_tex;
+	int				jumb;
+	int				index_jumb;
 }					t_game;
 
 
@@ -188,5 +191,6 @@ void				process_key(t_game *game, int *config_count, char *line,
 void				raycaster(t_game **game);
 void				wall_height_imag(t_game **g, int x, int *y, int start);
 void				imag_height_wall(t_game **g, int x, int *y, int start);
+void				drow_imag_in(t_game **g, int x, int *y, int start);
 
 #endif

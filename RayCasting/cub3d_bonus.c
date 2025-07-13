@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/07/10 16:12:25 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:39:58 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void move_player11(t_game **game, double angle_offset)
     double nx = (*game)->player_x + cos((*game)->angle + angle_offset) * SPED;
     double ny = (*game)->player_y + sin((*game)->angle + angle_offset) * SPED;
 
-    if (!is_wall(nx, ny, game) && ny > TILE && nx > TILE)
+    if (!is_wall(nx + 5, ny + 5, game) && ny > TILE + 5 && nx > TILE + 5)
     {
         (*game)->player_x = nx;
         (*game)->player_y = ny;
@@ -209,9 +209,9 @@ void move_player11(t_game **game, double angle_offset)
 	{
 		nx = (*game)->player_x + cos((*game)->angle + angle_offset) * SPED / 2;
 		ny = (*game)->player_y + sin((*game)->angle + angle_offset) * SPED / 2;
-		if (!is_wall((*game)->player_x, ny, game) && ny > TILE)
+		if (!is_wall((*game)->player_x, ny + 5, game) && ny > TILE + 5)
 			(*game)->player_y = ny;
-		else if (!is_wall(nx, (*game)->player_y, game) && nx > TILE)
+		else if (!is_wall(nx + 5, (*game)->player_y, game) && nx > TILE + 5)
 			(*game)->player_x = nx;
 	}
 }
@@ -374,9 +374,7 @@ void draw_imag(t_game **game, int x, double dist)
 	double corrected_dist = dist * cos((*game)->ray_angle - (*game)->angle);
 
 	wall_height = (TILE / corrected_dist) * dis_projected_plan;
-	if (wall_height > WIN_HEIGHT || dist == 0.0)
-		wall_height = WIN_HEIGHT;
-	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
+	int start = (*game)->jumb - (wall_height / 2);
 	int y = 0;
 
 	(*game)->wall_height = wall_height;
@@ -408,7 +406,7 @@ void draw_imag(t_game **game, int x, double dist)
 	{
 		(*game)->imag_height = (*game)->ys;
 		(*game)->imag_width = (*game)->xs;
-		(*game)->d_nsew = mlx_get_data_addr((*game)->s_image, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+		(*game)->d_nsew = mlx_get_data_addr((*game)->wall_imag, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
 	}
 	while (y < start)
 	{
@@ -419,10 +417,7 @@ void draw_imag(t_game **game, int x, double dist)
 		}
 		y++;
 	}
-	if (wall_height >= (*game)->imag_height)
-		wall_height_imag(game, x, &y, start);
-	else
-		imag_height_wall(game, x, &y, start);
+	drow_imag_in(game, x, &y, start);
 	while (y < WIN_HEIGHT)
 	{
 		if ((y < 2 || y > 8 + MINMAP_HE) || (x < 2 || x > 8 + MINMAP_WI))
@@ -522,6 +517,15 @@ int raycasting(t_game **game)
 		return (0);
 	}
 	mlx_clear_window((*game)->mlx, (*game)->win);
+
+	if ((*game)->index_jumb == 1)
+		(*game)->jumb += 2;
+	if ((*game)->jumb == (WIN_HEIGHT / 2 + 100) || (*game)->index_jumb == 0)
+	{
+		(*game)->index_jumb = 0;
+		if ((*game)->jumb > (WIN_HEIGHT / 2))
+			(*game)->jumb -= 2;
+	}
 	update_position_player(game);
 	int x = 0;
 	double step = FOV / WIN_WIDTH;
@@ -581,12 +585,20 @@ int prees_key(int key, t_game **game)
 		change_the_gane(game);
 	if ((*game)->keys[113])
 		(*game)->ng = 4;
+	if (key == 32)
+		(*game)->index_jumb = 1;
+	if (key == 99)
+		(*game)->jumb = (WIN_HEIGHT / 2) - 150;
 	return (0);
 }
 
 int	release_key(int key, t_game **game)
 {
 	(*game)->keys[key] = 0;
+	if (key == 32)
+		(*game)->jumb = WIN_HEIGHT / 2;
+	if (key == 99)
+		(*game)->jumb = WIN_HEIGHT / 2;
 	return (0);
 }
 
@@ -636,10 +648,13 @@ void	init_imag_player(t_game **g)
 	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/S.xpm", &(*g)->xs, &(*g)->ys);
 	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/E.xpm", &(*g)->xe, &(*g)->ye);
 	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/W.xpm", &(*g)->xw, &(*g)->yw);
+	(*g)->wall_imag = mlx_xpm_file_to_image((*g)->mlx, "textures/wall.xpm", &(*g)->xw, &(*g)->yw);
 
 	(*g)->ng = 4;
 	(*g)->shot = 0;
 	(*g)->h = 0;
+	(*g)->index_jumb = 0;
+	(*g)->jumb = WIN_HEIGHT / 2;
 }
 
 int	shot_gun(int butom, int x, int y, t_game **game)
@@ -710,12 +725,12 @@ void raycaster(t_game **game)
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
 	init_imag_player(game);
 
-	int x, y;
-	void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
+	// int x, y;
+	// void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
 
-	mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
-	sleep(5);
-	mlx_destroy_image((*game)->mlx, image);
+	// mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
+	// sleep(5);
+	// mlx_destroy_image((*game)->mlx, image);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);

@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/07/10 10:22:21 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/13 09:41:39 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,10 +253,7 @@ void draw_image(t_game **game, int x, double dist)
 		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
 		*(unsigned int *)dst = 0xb0d2fa;
 	}
-	if (wall_height >= (*game)->imag_height)
-		wall_height_imag(game, x,  &y, start);
-	else
-		imag_height_wall(game, x, &y, start);
+	drow_imag_in(game, x, &y, start);
 	while (y < WIN_HEIGHT)
 	{
 		dst = (*game)->d_imag_v + (y++ * (*game)->sl + x *((*game)->bpp / 8));
