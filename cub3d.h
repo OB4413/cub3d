@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/07/13 09:18:06 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/13 16:42:16 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ typedef struct s_game
 	int				imag_width;
 	int				wall_height;
 	double			ofs_tex;
-	int				jumb;
+	int				jump;
 	int				index_jumb;
 }					t_game;
 
