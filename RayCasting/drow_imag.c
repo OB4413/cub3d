@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:05:33 by obarais           #+#    #+#             */
-/*   Updated: 2025/07/13 16:31:54 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:11:07 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 void	drow_imag_in(t_game **g, int x, int *y, int start)
 {
+	int scling = (*g)->imag_width / TILE;
 	int i = round((*g)->ofs_tex);
 	double j = 0.0;
 	char *im;
 	char *dst;
 
+	i = i * scling;
 	while (*y <= start + (*g)->wall_height && *y <= WIN_HEIGHT)
 	{
 		j = ((double)(*g)->imag_height / (*g)->wall_height) * (*y - start);

@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:48:35 by sodahani          #+#    #+#             */
-/*   Updated: 2025/07/13 16:42:16 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:57:50 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,9 @@ typedef struct s_game
 	void			*w_image;
 	int				yw;
 	int				xw;
-	void			*wall_imag;
+	void			*door_imag;
+	int				yd;
+	int				xd;
 	int				imag_height;
 	int				imag_width;
 	int				wall_height;

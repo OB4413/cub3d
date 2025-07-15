@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/07/14 14:38:39 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/15 09:33:00 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,8 @@ void move_player11(t_game **game, double angle_offset)
     double nx = cos((*game)->angle + angle_offset) * SPED;
     double ny = sin((*game)->angle + angle_offset) * SPED;
 
-	double a = (*game)->player_x + (6 * nx);
-	double b = (*game)->player_y + (6 * ny);
+	double a = (*game)->player_x + nx;
+	double b = (*game)->player_y + ny;
     if (!is_wall(a, b, game) && a > TILE && b > TILE)
     {
         (*game)->player_x += nx;
@@ -211,8 +211,8 @@ void move_player11(t_game **game, double angle_offset)
 	{
 		nx = cos((*game)->angle + angle_offset) * SPED / 2;
 		ny = sin((*game)->angle + angle_offset) * SPED / 2;
-		a = (*game)->player_x + (6 * nx);
-		b = (*game)->player_y + (6 * ny);
+		a = (*game)->player_x + nx;
+		b = (*game)->player_y + ny;
 		if (!is_wall((*game)->player_x, b, game) && b > TILE)
 			(*game)->player_y += ny;
 		else if (!is_wall(a, (*game)->player_y, game) && a > TILE )
@@ -410,9 +410,9 @@ void draw_imag(t_game **game, int x, double dist)
 	}
 	else if ((*game)->char_color == 'd')
 	{
-		(*game)->imag_height = (*game)->ys;
-		(*game)->imag_width = (*game)->xs;
-		(*game)->d_nsew = mlx_get_data_addr((*game)->wall_imag, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
+		(*game)->imag_height = (*game)->yd;
+		(*game)->imag_width = (*game)->xd;
+		(*game)->d_nsew = mlx_get_data_addr((*game)->door_imag, &(*game)->pbpp, &(*game)->psl, &(*game)->pend);
 	}
 	while (y < start)
 	{
@@ -649,7 +649,7 @@ void	init_imag_player(t_game **g)
 	(*g)->s_image = mlx_xpm_file_to_image((*g)->mlx, "textures/S.xpm", &(*g)->xs, &(*g)->ys);
 	(*g)->e_image = mlx_xpm_file_to_image((*g)->mlx, "textures/E.xpm", &(*g)->xe, &(*g)->ye);
 	(*g)->w_image = mlx_xpm_file_to_image((*g)->mlx, "textures/W.xpm", &(*g)->xw, &(*g)->yw);
-	(*g)->wall_imag = mlx_xpm_file_to_image((*g)->mlx, "textures/wall.xpm", &(*g)->xw, &(*g)->yw);
+	(*g)->door_imag = mlx_xpm_file_to_image((*g)->mlx, "textures/door.xpm", &(*g)->xd, &(*g)->yd);
 
 	(*g)->ng = 4;
 	(*g)->shot = 0;
@@ -726,12 +726,12 @@ void raycaster(t_game **game)
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
 	init_imag_player(game);
 
-	int x, y;
-	void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
+	// int x, y;
+	// void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
 
-	mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
-	sleep(5);
-	mlx_destroy_image((*game)->mlx, image);
+	// mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
+	// sleep(5);
+	// mlx_destroy_image((*game)->mlx, image);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
