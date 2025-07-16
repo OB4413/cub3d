@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/07/15 09:33:00 by obarais          ###   ########.fr       */
+/*   Updated: 2025/07/16 14:53:52 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,7 +501,6 @@ int	loop_chose_gun(t_game **g)
 
 	file = ft_strjoin("textures/chose_gun/", ft_strjoin(ft_itoa(i), ".xpm"));
 	ch_gu = mlx_xpm_file_to_image((*g)->mlx, file, &x, &y);
-	free(file);
 
 	mlx_clear_window((*g)->mlx, (*g)->win);
 	mlx_put_image_to_window((*g)->mlx, (*g)->win, ch_gu, 0, 0);
@@ -591,7 +590,7 @@ int prees_key(int key, t_game **game)
 	if ((*game)->keys[113])
 		(*game)->ng = 4;
 	if (key == 99)
-		(*game)->jump = (WIN_HEIGHT / 2) - 150;
+		(*game)->jump = (WIN_HEIGHT / 2) - 200;
 	return (0);
 }
 
@@ -726,12 +725,12 @@ void raycaster(t_game **game)
 	(*game)->d_imag_v = mlx_get_data_addr((*game)->imag_v, &(*game)->bpp, &(*game)->sl, &(*game)->en);
 	init_imag_player(game);
 
-	// int x, y;
-	// void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
+	int x, y;
+	void *image = mlx_xpm_file_to_image((*game)->mlx, "textures/open_game.xpm", &x, &y);
 
-	// mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
-	// sleep(5);
-	// mlx_destroy_image((*game)->mlx, image);
+	mlx_put_image_to_window((*game)->mlx, (*game)->win, image, 0, 0);
+	sleep(5);
+	mlx_destroy_image((*game)->mlx, image);
 
 	mlx_hook((*game)->win, 2, 1L << 0, prees_key, game);
 	mlx_hook((*game)->win, 3, 1L << 1, release_key, game);
