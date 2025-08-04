@@ -131,7 +131,7 @@ int	validate_and_set_rgb(t_game *game, char *identifier, char **rgb);
 bool	settings_are_set(t_game *game);
 int	count_commas(char *colors);
 bool	is_valid_filename(char *filename);
-void    	raycaster(t_game *game);
+void    raycaster(t_game *game);
 void	drow_imag_in(t_game *g, int x, int *y, int start);
 bool	is_texture_valid(t_game *game, char *path);
 

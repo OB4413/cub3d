@@ -2,7 +2,7 @@ NAME = cub3D
 
 NAME_BONUS = cub3D_bonus
 
-SRC = mandatory/main.c mandatory/cub3d.c\
+SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
 	  mandatory/get_next_line/get_next_line.c \
 	  mandatory/get_next_line/get_next_line_utils.c \
 	  mandatory/parsing/parse_file.c \
@@ -21,7 +21,7 @@ SRC = mandatory/main.c mandatory/cub3d.c\
 	  mandatory/utils/ft_isdigit.c \
 	  mandatory/utils/ft_atoi.c \
 
-BONUS_SRC = bonus/main.c bonus/cob3b_bonus.c \
+BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c\
 	  bonus/get_next_line/get_next_line.c \
 	  bonus/get_next_line/get_next_line_utils.c \
 	  bonus/parsing/parse_file.c \
@@ -39,6 +39,7 @@ BONUS_SRC = bonus/main.c bonus/cob3b_bonus.c \
 	  bonus/utils/ft_isspace.c \
 	  bonus/utils/ft_isdigit.c \
 	  bonus/utils/ft_atoi.c \
+	  bonus/utils/ft_itoa.c \
 
 OBJS = $(SRC:.c=.o)
 
@@ -48,7 +49,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
-MLX = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+MINILIBX = minilibx-linux/libmlx.a
 
 RM = rm -f
 
@@ -56,11 +57,11 @@ all: $(NAME)
 
 bonus: $(NAME_BONUS)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(MLX) -o $(NAME)
+$(NAME): $(OBJS) $(MINILIBX)
+	$(CC) $(CFLAGS) $(OBJS) $(MINILIBX) -lm -lXext -lX11 -o $(NAME)
 
-$(NAME_BONUS): $(BONUS_OBJS)
-	$(CC) $(CFLAGS) $(BONUS_OBJS) $(MLX) -o $(NAME_BONUS)
+$(NAME_BONUS): $(BONUS_OBJS) $(MINILIBX)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) $(MINILIBX) -lm -lXext -lX11 -o $(NAME_BONUS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

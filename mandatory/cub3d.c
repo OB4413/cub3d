@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/04 19:50:19 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/04 21:48:51 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,8 @@ void draw_image(t_game *game, int x, double dist)
 	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 
+	if (!game->s_image)
+		printf("hhhhhhhhhh\n");
 	game->wall_height = wall_height;
 	if (game->char_color == 'n')
 	{
@@ -366,10 +368,10 @@ void	init_imag_player(t_game *g)
 	g->ak_imag = malloc(sizeof(void *) * 5);
 	int x, y;
 
-	g->pst_imag[0] = mlx_xpm_file_to_image(g->mlx, "../textures/player/pistol/1.xpm", &x, &y);
-	g->pst_imag[1] = mlx_xpm_file_to_image(g->mlx, "../textures/player/pistol/2.xpm", &x, &y);
-	g->pst_imag[2] = mlx_xpm_file_to_image(g->mlx, "../textures/player/pistol/3.xpm", &x, &y);
-	g->pst_imag[3] = mlx_xpm_file_to_image(g->mlx, "../textures/player/pistol/4.xpm", &x, &y);
+	g->pst_imag[0] = mlx_xpm_file_to_image(g->mlx, "textures/player/pistol/1.xpm", &x, &y);
+	g->pst_imag[1] = mlx_xpm_file_to_image(g->mlx, "textures/player/pistol/2.xpm", &x, &y);
+	g->pst_imag[2] = mlx_xpm_file_to_image(g->mlx, "textures/player/pistol/3.xpm", &x, &y);
+	g->pst_imag[3] = mlx_xpm_file_to_image(g->mlx, "textures/player/pistol/4.xpm", &x, &y);
 	g->pst_imag[4] = NULL;
 
 	g->n_image = mlx_xpm_file_to_image(g->mlx, g->no, &g->xn, &g->yn);

@@ -65,10 +65,12 @@ int	validate_player_spawn(t_game *game)
 		{
 			if (game->map[i][j] == 'N' || game->map[i][j] == 'S' || game->map[i][j] == 'E'
 				|| game->map[i][j] == 'W')
-				{
-					
-					player_count++;
-				}
+			{
+				game->player_char = game->map[i][j];
+				game->player_x = j;
+				game->player_y = i;
+				player_count++;
+			}
 			j++;
 		}
 		i++;

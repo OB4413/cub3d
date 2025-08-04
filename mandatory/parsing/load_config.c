@@ -18,7 +18,10 @@ int	set_texture(t_game *game, char *identifier, char *path)
 		game->we = path;
 	}
 	if(!is_texture_valid(game, path))
-	return (1);
+	{
+		printf("hhhhhhhh\n");
+		return (1);
+	}
 	return (0);
 }
 
