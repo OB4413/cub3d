@@ -1,45 +1,75 @@
+NAME = cub3D
+
+NAME_BONUS = cub3D_bonus
+
+SRC = mandatory/main.c mandatory/cub3d.c\
+	  mandatory/get_next_line/get_next_line.c \
+	  mandatory/get_next_line/get_next_line_utils.c \
+	  mandatory/parsing/parse_file.c \
+	  mandatory/parsing/load_config.c \
+	  mandatory/parsing/load_config_utils.c \
+	  mandatory/parsing/load_map.c \
+	  mandatory/parsing/check_map.c \
+	  mandatory/utils/ft_memset.c \
+	  mandatory/utils/ft_strtrim.c \
+	  mandatory/utils/ft_putstr_fd.c \
+	  mandatory/utils/ft_strncmp.c \
+	  mandatory/utils/ft_strcmp.c \
+	  mandatory/utils/ft_split.c \
+	  mandatory/utils/ft_split_ws.c \
+	  mandatory/utils/ft_isspace.c \
+	  mandatory/utils/ft_isdigit.c \
+	  mandatory/utils/ft_atoi.c \
+
+BONUS_SRC = bonus/main.c bonus/cob3b_bonus.c \
+	  bonus/get_next_line/get_next_line.c \
+	  bonus/get_next_line/get_next_line_utils.c \
+	  bonus/parsing/parse_file.c \
+	  bonus/parsing/load_config.c \
+	  bonus/parsing/load_config_utils.c \
+	  bonus/parsing/load_map.c \
+	  bonus/parsing/check_map.c \
+	  bonus/utils/ft_memset.c \
+	  bonus/utils/ft_strtrim.c \
+	  bonus/utils/ft_putstr_fd.c \
+	  bonus/utils/ft_strncmp.c \
+	  bonus/utils/ft_strcmp.c \
+	  bonus/utils/ft_split.c \
+	  bonus/utils/ft_split_ws.c \
+	  bonus/utils/ft_isspace.c \
+	  bonus/utils/ft_isdigit.c \
+	  bonus/utils/ft_atoi.c \
+
+OBJS = $(SRC:.c=.o)
+
+BONUS_OBJS = $(BONUS_SRC:.c=.o)
+
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
 
-TARGET = cub3D
-TARGET_B = cub3D_B
-SRC = RayCasting/cub3d.c RayCasting/drow_imag.c libft_used/ft_split.c libft_used/ft_strjoin.c libft_used/ft_strlen.c libft_used/ft_lstadd_back.c libft_used/ft_lstclear.c \
-	 libft_used/ft_lstnew.c parsing/malloc.c libft_used/ft_strncmp.c parsing/main.c parsing/map.c libft_used/ft_putstr_fd.c \
-	 get_next_line.c get_next_line_utils.c libft_used/ft_atoi.c libft_used/ft_strtrim.c parsing/validate_configuration_lines.c \
-	 parsing/extract_number.c parsing/check_xpm.c parsing/map_section.c parsing/validate_configuration_lines2.c parsing/map_section2.c \
-	 parsing/validate_configuration_lines3.c
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
-SRC_B = RayCasting/cub3d_bonus.c RayCasting/drow_imag.c libft_used/ft_split.c libft_used/ft_strjoin.c libft_used/ft_strlen.c libft_used/ft_lstadd_back.c libft_used/ft_lstclear.c \
-	 libft_used/ft_lstnew.c parsing/malloc.c libft_used/ft_strncmp.c parsing/main.c parsing/map.c libft_used/ft_putstr_fd.c libft_used/ft_itoa.c\
-	 get_next_line.c get_next_line_utils.c libft_used/ft_atoi.c libft_used/ft_strtrim.c parsing/validate_configuration_lines.c \
-	 parsing/extract_number.c parsing/check_xpm.c parsing/map_section.c parsing/validate_configuration_lines2.c parsing/map_section2.c \
-	 parsing/validate_configuration_lines3.c
+MLX = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
 
+RM = rm -f
 
-OBJ = $(SRC:.c=.o)
-OBJ_B = $(SRC_B:.c=.o)
-MINILIBX = minilibx-linux/libmlx.a
+all: $(NAME)
 
-all: $(TARGET) clean
+bonus: $(NAME_BONUS)
 
-bonus: $(TARGET_B) clean
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(MLX) -o $(NAME)
 
-$(TARGET): $(OBJ) $(MINILIBX)
-	$(CC) $(CFLAGS) $(OBJ) $(MINILIBX) -o $(TARGET) -lm -lXext -lX11
-
-$(TARGET_B): $(OBJ_B) $(MINILIBX)
-	$(CC) $(CFLAGS) $(OBJ_B) $(MINILIBX) -o $(TARGET_B) -lm -lXext -lX11
+$(NAME_BONUS): $(BONUS_OBJS)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) $(MLX) -o $(NAME_BONUS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ)
-	rm -rf $(OBJ_B)
-
+	$(RM) $(OBJS) $(BONUS_OBJS)
 fclean: clean
-	rm -rf $(TARGET)
-	rm -rf $(TARGET_B)
+	$(RM) $(NAME) $(NAME_BONUS)
 
 re: fclean all
-.PHONY: all clean fclean re
+
+.PHONY: all clean fclean re bonus

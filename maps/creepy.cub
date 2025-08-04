@@ -3,12 +3,6 @@ EA textures/simonkraft/respawn_anchor_side2.xpm
 SO textures/simonkraft/respawn_anchor_side4.xpm
 WE textures/simonkraft/respawn_anchor_side3.xpm
 
-DOOR_CLOSED textures/bonus/door_closed.xpm
-DOOR_OPEN textures/bonus/door_open.xpm
-KEY         textures/bonus/key.xpm
-ANIM_0      textures/bonus/enemy_0.xpm
-ANIM_1      textures/bonus/enemy_1.xpm
-
 C 35,19,73
 F 15,6,40
 
