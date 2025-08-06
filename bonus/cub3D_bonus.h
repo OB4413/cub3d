@@ -1,13 +1,13 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <mlx.h>
+# include "../minilibx-linux/mlx.h"
 # include <math.h>
 # include "get_next_line/get_next_line.h"
 # include <stdbool.h>
 # include <stdlib.h>
 # include <fcntl.h>
-#include <stdio.h>
+# include <stdio.h>
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846

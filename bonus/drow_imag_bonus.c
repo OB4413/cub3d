@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drow_imag_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:05:33 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/04 21:42:29 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/06 17:58:08 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	drow_imag_in(t_game *g, int x, int *y, int start)
 {
+	printf("wall_heigh %d\n", g->wall_height);
 	int scling = g->imag_width / TILE;
 	int i = round(g->ofs_tex);
 	double j = 0.0;

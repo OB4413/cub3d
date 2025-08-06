@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/04 21:48:51 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/06 18:04:40 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,8 +219,6 @@ void draw_image(t_game *game, int x, double dist)
 	double corrected_dist = dist * cos(game->ray_angle - game->angle);
 
 	wall_height = (TILE / corrected_dist) * dis_projected_plan;
-	if (wall_height > WIN_HEIGHT || dist == 0.0)
-		wall_height = WIN_HEIGHT;
 	int start = (WIN_HEIGHT / 2) - (wall_height / 2);
 	int y = 0;
 

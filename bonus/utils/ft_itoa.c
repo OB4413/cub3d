@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 11:04:06 by sodahani          #+#    #+#             */
-/*   Updated: 2025/08/04 21:40:53 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/06 14:31:44 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,11 @@ static char	*ft_cpy_int(char *array, long n, int j, int k)
 
 char	*ft_itoa(int n)
 {
-	int		i;
 	int		j;
 	int		k;
 	long	b;
 	char	*array;
 
-	i = 0;
 	k = 0;
 	j = 0;
 	b = n;
