@@ -14,7 +14,6 @@
 
 void	drow_imag_in(t_game *g, int x, int *y, int start)
 {
-	printf("wall_heigh %d\n", g->wall_height);
 	int scling = g->imag_width / TILE;
 	int i = round(g->ofs_tex);
 	double j = 0.0;
