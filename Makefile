@@ -3,6 +3,7 @@ NAME = cub3D
 NAME_BONUS = cub3D_bonus
 
 SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
+	  mandatory/move_player.c mandatory/dda.c mandatory/help_cub3d.c \
 	  mandatory/get_next_line/get_next_line.c \
 	  mandatory/get_next_line/get_next_line_utils.c \
 	  mandatory/parsing/parse_file.c \
@@ -21,7 +22,9 @@ SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
 	  mandatory/utils/ft_isdigit.c \
 	  mandatory/utils/ft_atoi.c \
 
-BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c\
+BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c  \
+	  bonus/dda.c bonus/move_player.c bonus/help_cub3d.c bonus/help1_cub3d.c \
+	  bonus/minimap_imag_player.c bonus/help2_cub3d.c \
 	  bonus/get_next_line/get_next_line.c \
 	  bonus/get_next_line/get_next_line_utils.c \
 	  bonus/parsing/parse_file.c \
