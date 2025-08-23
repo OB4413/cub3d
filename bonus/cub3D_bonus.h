@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 11:37:07 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 10:20:47 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 13:31:35 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void		raycaster(t_game *game);
 void		drow_imag_in(t_game *g, int x, int *y, int start);
 bool		is_texture_valid(t_game *game, char *path);
 void		draw_view(t_game *game, int x, double dist, int y);
-double		dda(t_game *game);
+double		dda(t_game *game, int facing_down, int facing_right);
 void		chose_the_angle_p(t_game *game);
 int			prees_key(int key, t_game *game);
 int			release_key(int key, t_game *game);
@@ -172,5 +172,6 @@ int			shot_gun(int butom, int x, int y, t_game *game);
 int			stop_gun(int butom, int x, int y, t_game *game);
 void		raycaster(t_game *game);
 void		help_raycaster(t_game *game);
+double		help_dda(t_game *g, int facing_right);
 
 #endif

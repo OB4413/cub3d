@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 10:21:09 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 11:19:21 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	help_raycasting(t_game *game, int x)
 	while (x < WIN_WIDTH)
 	{
 		normalize_angle(game);
-		game->dist = ceil(dda(game));
+		game->dist = ceil(dda(game, 0, 0));
 		draw_view(game, x, game->dist, 0);
 		game->ray_angle += FOV / WIN_WIDTH;
 		x++;

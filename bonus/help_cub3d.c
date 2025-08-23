@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_cub3d.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:19:46 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/21 12:21:54 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 13:30:17 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ int	loop_chose_gun(t_game *g, int x, int y)
 	static int	i = 0;
 	static void	*ch_gu = NULL;
 	char		*file;
+	void		*image;
 
+	image = mlx_xpm_file_to_image(g->mlx, "textures/login1.xpm", &x, &y);
+	mlx_put_image_to_window(g->mlx, g->win, image, 1001, 0);
 	if (ch_gu)
 		mlx_destroy_image(g->mlx, ch_gu);
 	file = ft_strjoin("textures/chose_gun/", ft_strjoin(ft_itoa(i), ".xpm"));
