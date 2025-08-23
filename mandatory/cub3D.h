@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:36:49 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/08 11:14:44 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 11:12:59 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ typedef struct s_ray
 
 typedef struct s_game
 {
-	void	**ak_imag;
-	void	**mg_imag;
 	void	**pst_imag;
 	void	*d_p_imag;
 	int		pbpp;
@@ -149,8 +147,8 @@ bool		is_texture_valid(t_game *game, char *path);
 int			is_wall(double x, double y, t_game *game);
 void		normalize_angle(t_game *game);
 int			ftk_strlen(char *str);
-void		the_distance_with_y(t_game *game, int i, double xn, double yn);
-void		the_distance_with_x(t_game *game, int i, double xn, double yn);
+void		the_distance_with_y(t_game *g, int i, double step_x, double step_y);
+void		the_distance_with_x(t_game *g, int i, double step_x, double step_y);
 double		dda(t_game *game, int facing_down, int facing_right);
 void		draw_view(t_game *game, int x, double dist, char *dst);
 void		drow_imag_player(t_game *g, int x, int y, char *st);
@@ -159,8 +157,6 @@ int			prees_key(int key, t_game *game);
 int			release_key(int key, t_game *game);
 void		chose_the_angle_p(t_game *game);
 void		change_line_to_null(t_game *game);
-int			shot_gun(t_game *game);
-int			stop_gun(t_game *game);
 void		move_player11(t_game *game, double angle_offset);
 int			update_position_player(t_game *game);
 int			raycasting(t_game *game);

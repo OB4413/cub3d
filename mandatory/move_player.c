@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 09:13:37 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/08 11:07:45 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 11:15:25 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,18 @@ int	prees_key(int key, t_game *game)
 	if (key == 65307)
 		exit(0);
 	game->keys[key] = 1;
-	if (game->keys[32])
-		shot_gun(game);
+	if (game->keys[101])
+		game->shot = 1;
 	return (0);
 }
 
 int	release_key(int key, t_game *game)
 {
 	game->keys[key] = 0;
-	if (!game->keys[32])
-		stop_gun(game);
+	if (!game->keys[101])
+	{
+		game->shot = 0;
+		game->h = 0;
+	}
 	return (0);
 }

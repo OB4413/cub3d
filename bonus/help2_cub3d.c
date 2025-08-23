@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help2_cub3d.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:04:53 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/21 12:23:23 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/22 22:35:29 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	help_raycaster(t_game *game)
 	game->player_y *= TILE;
 	game->player_x += TILE / 2;
 	game->player_y += TILE / 2;
-	game->imag = mlx_new_image(game->mlx, MINMAP_WI, MINMAP_HE);
+	game->imag = mlx_new_image(game->mlx, (int)MINMAP_WI, (int)MINMAP_HE);
 	game->d_imag = mlx_get_data_addr(game->imag, &game->bits_per_pixel,
 			&game->size_line, &game->endian);
 	game->imag_v = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);

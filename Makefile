@@ -56,9 +56,9 @@ MINILIBX = minilibx-linux/libmlx.a
 
 RM = rm -f
 
-all: $(NAME)
+all: $(NAME) clean
 
-bonus: $(NAME_BONUS)
+bonus: $(NAME_BONUS) clean
 
 $(NAME): $(OBJS) $(MINILIBX)
 	$(CC) $(CFLAGS) $(OBJS) $(MINILIBX) -lm -lXext -lX11 -o $(NAME)

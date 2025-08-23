@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drow_imag.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:05:33 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/08 11:11:23 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 11:13:45 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,6 @@ void	init_imag_player(t_game *g)
 	int	y;
 
 	g->pst_imag = malloc(sizeof(void *) * 5);
-	g->mg_imag = malloc(sizeof(void *) * 5);
-	g->ak_imag = malloc(sizeof(void *) * 5);
 	g->pst_imag[0] = mlx_xpm_file_to_image(g->mlx,
 			"textures/player/pistol/1.xpm", &x, &y);
 	g->pst_imag[1] = mlx_xpm_file_to_image(g->mlx,

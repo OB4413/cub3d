@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 11:37:07 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/21 12:20:28 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/23 10:20:47 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@
 # define MAX_LINES 100
 # define TILE 64
 # define MINTILE 8
-# define WIN_WIDTH 1000
+# define WIN_WIDTH 1020
 # define WIN_HEIGHT 600
-# define MINMAP_WI 166.666666667
+# define MINMAP_WI 170
 # define MINMAP_HE 100
 # define FOV 1.0471975512
 # define SPED 1.5
