@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 15:44:08 by ynadime           #+#    #+#             */
+/*   Updated: 2025/08/24 15:44:09 by ynadime          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3D_bonus.h"
 
 bool	is_door_between_walls(char **map, int x, int y)
@@ -14,11 +26,11 @@ bool	is_cell_surrounded(char **map, int x, int y)
 		return (false);
 	if (!map[y][x + 1] || ft_isspace(map[y][x + 1]))
 		return (false);
-	if ((y - 1) < 0 || ft_strlen(map[y - 1]) <= (size_t)x || ft_isspace(map[y
-			- 1][x]))
+	if ((y - 1) < 0 || ft_strlen(map[y - 1]) <= (size_t)x
+		|| ft_isspace(map[y - 1][x]))
 		return (false);
-	if (!map[y + 1] || ft_strlen(map[y + 1]) <= (size_t)x || ft_isspace(map[y
-			+ 1][x]))
+	if (!map[y + 1] || ft_strlen(map[y + 1]) <= (size_t)x
+		|| ft_isspace(map[y + 1][x]))
 		return (false);
 	return (true);
 }
@@ -50,21 +62,18 @@ int	validate_map_surroundings(char **map)
 	return (0);
 }
 
-int	validate_player_spawn(t_game *game)
+int	validate_player_spawn(t_game *game, int i, int j)
 {
-	int	i;
-	int	j;
 	int	player_count;
 
 	player_count = 0;
-	i = 0;
 	while (game->map[i])
 	{
 		j = 0;
 		while (game->map[i][j])
 		{
-			if (game->map[i][j] == 'N' || game->map[i][j] == 'S' || game->map[i][j] == 'E'
-				|| game->map[i][j] == 'W')
+			if (game->map[i][j] == 'N' || game->map[i][j] == 'S'
+				|| game->map[i][j] == 'E' || game->map[i][j] == 'W')
 			{
 				game->player_char = game->map[i][j];
 				game->player_x = j;
@@ -84,7 +93,7 @@ int	validate_player_spawn(t_game *game)
 
 int	check_map(t_game *game)
 {
-	if (validate_player_spawn(game)
+	if (validate_player_spawn(game, 0, 0)
 		|| validate_map_surroundings(game->map))
 		return (1);
 	return (0);

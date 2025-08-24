@@ -2,7 +2,6 @@ NO textures/N.xpm
 EA textures/E.xpm
 SO textures/S.xpm
 WE textures/W.xpm
-DOOR textures/door.xpm
 
 C 30,200,100
 F 2,25,120

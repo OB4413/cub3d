@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_config.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 15:44:13 by ynadime           #+#    #+#             */
+/*   Updated: 2025/08/24 15:44:14 by ynadime          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3D_bonus.h"
 
 int	set_texture(t_game *game, char *identifier, char *path)
@@ -18,8 +30,8 @@ int	set_texture(t_game *game, char *identifier, char *path)
 		game->we = path;
 	else if (!ft_strcmp(identifier, "DOOR"))
 		game->door = path;
-	if(!is_texture_valid(game, path))
-	return (1);
+	if (!is_texture_valid(game, path))
+		return (1);
 	return (0);
 }
 
@@ -58,7 +70,7 @@ int	set_settings(t_game *game, char *line)
 
 int	load_config(t_game *game, int fd)
 {
-	char *line;
+	char	*line;
 
 	line = ft_strtrim(get_next_line(fd), "\n");
 	while (line)

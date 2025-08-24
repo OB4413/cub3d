@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_config.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 15:41:15 by ynadime           #+#    #+#             */
+/*   Updated: 2025/08/24 15:41:16 by ynadime          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3D.h"
 
 int	set_texture(t_game *game, char *identifier, char *path)
@@ -17,11 +29,8 @@ int	set_texture(t_game *game, char *identifier, char *path)
 	{
 		game->we = path;
 	}
-	if(!is_texture_valid(game, path))
-	{
-		printf("hhhhhhhh\n");
+	if (!is_texture_valid(game, path))
 		return (1);
-	}
 	return (0);
 }
 
@@ -59,7 +68,7 @@ int	set_settings(t_game *game, char *line)
 
 int	load_config(t_game *game, int fd)
 {
-	char *line;
+	char	*line;
 
 	line = ft_strtrim(get_next_line(fd), "\n");
 	while (line)
@@ -70,8 +79,7 @@ int	load_config(t_game *game, int fd)
 			break ;
 		line = ft_strtrim(get_next_line(fd), "\n");
 	}
-	if(!settings_are_set(game))
-		return(ft_putstr_fd("Error!\nMissing settings.\n", 2), 1);
-
+	if (!settings_are_set(game))
+		return (ft_putstr_fd("Error!\nMissing settings.\n", 2), 1);
 	return (0);
 }
