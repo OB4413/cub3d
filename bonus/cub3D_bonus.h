@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 11:37:07 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 13:31:35 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/24 11:42:05 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int			is_wall(double x, double y, t_game *game);
 void		normalize_angle(t_game *game);
 void		open_and_close_door(t_game *g);
 void		change_the_gane(t_game *g);
-void		draw_minimap(t_game *g);
+void		draw_minimap(t_game *g, int min_x, int min_y);
 void		drow_imag_player(t_game *g, int x, int y);
 int			loop_chose_gun(t_game *g, int x, int y);
 int			raycasting(t_game *game);
@@ -173,5 +173,7 @@ int			stop_gun(int butom, int x, int y, t_game *game);
 void		raycaster(t_game *game);
 void		help_raycaster(t_game *game);
 double		help_dda(t_game *g, int facing_right);
+void		help4_drow_minimap(t_game *g, char *dst, int i, int j);
+void		help_drow_imag_player(t_game *g);
 
 #endif

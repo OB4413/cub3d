@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 11:19:21 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/24 13:33:44 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 void	help_raycasting(t_game *game, int x)
 {
+	int	min_x;
+	int	min_y;
+
+	min_x = game->player_x / TILE;
+	min_y = game->player_y / TILE;
+	min_x = (min_x * MINTILE) - (MINMAP_WI / 2);
+	min_y = (min_y * MINTILE) - (MINMAP_HE / 2);
 	while (x < WIN_WIDTH)
 	{
 		normalize_angle(game);
@@ -24,7 +31,7 @@ void	help_raycasting(t_game *game, int x)
 	}
 	drow_imag_player(game, 0, 0);
 	mlx_put_image_to_window(game->mlx, game->win, game->imag_v, 0, 0);
-	draw_minimap(game);
+	draw_minimap(game, min_x, min_y);
 	mlx_mouse_move(game->mlx, game->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 }
 
@@ -103,28 +110,9 @@ void	init_imag_player(t_game *g, int x, int y)
 	g->jump = WIN_HEIGHT / 2;
 }
 
-void	raycaster(t_game *game)
+void	change_the_gane(t_game *g)
 {
-	game->mlx = mlx_init();
-	if (!game->mlx)
-	{
-		ft_putstr_fd("Error initializing MLX\n", 2);
-		exit(1);
-	}
-	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3D");
-	if (!game->win)
-	{
-		ft_putstr_fd("Error creating window\n", 2);
-		exit(1);
-	}
-	game->i = 0;
-	help_raycaster(game);
-	mlx_hook(game->win, 2, 1L << 0, prees_key, game);
-	mlx_hook(game->win, 3, 1L << 1, release_key, game);
-	mlx_hook(game->win, 5, 1L << 3, stop_gun, game);
-	mlx_hook(game->win, 6, 1L << 6, mouse_move, game);
-	mlx_mouse_hook(game->win, shot_gun, game);
-	mlx_loop_hook(game->mlx, raycasting, game);
-	mlx_hook(game->win, 17, 0, mlx_loop_end, game->mlx);
-	mlx_loop(game->mlx);
+	g->ng++;
+	if (g->ng == 3)
+		g->ng = 0;
 }

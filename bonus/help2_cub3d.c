@@ -6,17 +6,68 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:04:53 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 13:31:51 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/24 11:40:10 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D_bonus.h"
 
-void	change_the_gane(t_game *g)
+void	drow_imag_player(t_game *g, int x, int y)
 {
-	g->ng++;
-	if (g->ng == 3)
-		g->ng = 0;
+	char *(dst), *(st);
+	if (g->ng == 0)
+		g->d_p_imag = mlx_get_data_addr(g->pst_imag[g->h], &g->pbpp, &g->psl,
+				&g->pend);
+	if (g->ng == 1)
+		g->d_p_imag = mlx_get_data_addr(g->ak_imag[g->h], &g->pbpp, &g->psl,
+				&g->pend);
+	if (g->ng == 2)
+		g->d_p_imag = mlx_get_data_addr(g->mg_imag[g->h], &g->pbpp, &g->psl,
+				&g->pend);
+	while (y++ <= WIN_HEIGHT)
+	{
+		x = 0;
+		while (x <= WIN_WIDTH)
+		{
+			dst = g->d_p_imag + (y * g->psl + x * (g->pbpp / 8));
+			if (*(unsigned int *)dst != 0x01fefe)
+			{
+				st = g->d_imag_v + (y * g->sl + x * (g->bpp / 8));
+				*(unsigned int *)st = *(unsigned int *)dst;
+			}
+			x++;
+		}
+	}
+	help_drow_imag_player(g);
+}
+
+void	help_drow_imag_player(t_game *g)
+{
+	static int	n = 0;
+
+	if (g->shot == 1)
+	{
+		if (n++ == 2)
+		{
+			n = 0;
+			g->h++;
+		}
+		if (g->ng == 0)
+		{
+			if (g->pst_imag[g->h] == NULL)
+				g->h = 0;
+		}
+		if (g->ng == 1)
+		{
+			if (g->ak_imag[g->h] == NULL)
+				g->h = 0;
+		}
+		if (g->ng == 2)
+		{
+			if (g->mg_imag[g->h] == NULL)
+				g->h = 0;
+		}
+	}
 }
 
 void	help_raycaster(t_game *game)
@@ -58,4 +109,18 @@ double	help_dda(t_game *g, int facing_right)
 	else
 		g->char_color = 'e';
 	return (g->distances_x);
+}
+
+void	help4_drow_minimap(t_game *g, char *dst, int i, int j)
+{
+	if (g->map[j / MINTILE] && g->map[j / MINTILE][i / MINTILE] == '1')
+		*(unsigned int *)dst = 0xffffff;
+	else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
+		== 'D' || g->map[j / MINTILE][i / MINTILE] == 'C'))
+		*(unsigned int *)dst = 0xff0000;
+	else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
+		== '0' || g->map[j / MINTILE][i / MINTILE] == g->player_char))
+		*(unsigned int *)dst = 0xff00ff;
+	else
+		*(unsigned int *)dst = 0x000000;
 }

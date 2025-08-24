@@ -6,73 +6,21 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:27:40 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 19:19:35 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/24 11:39:58 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D_bonus.h"
 
-void	draw_minimap(t_game *g)
+void	help_drow_minimap(t_game *g, int mn_x, int mn_y, char *dst)
 {
-	int min_x = g->player_x / TILE;
-	int min_y = g->player_y / TILE;
+	int		dy;
+	int		dx;
+	int		px;
+	int		py;
 
-	min_x = (min_x * MINTILE) - (MINMAP_WI / 2);
-	min_y = (min_y * MINTILE) - (MINMAP_HE / 2);
-	int x = 0;
-	int y = 0;
-	if (min_x < 0 || min_y < 0)
-	{
-		if (min_x < 0)
-			min_x = 0;
-		if (min_y < 0)
-			min_y = 0;
-	}
-	if ((min_y + MINMAP_HE) / MINTILE > g->i - 1 || (min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y/ MINTILE]))
-	{
-		if ((min_y + MINMAP_HE) / MINTILE > g->i - 1)
-		{
-			if (MINMAP_HE < g->i * MINTILE)
-				min_y -= (min_y + MINMAP_HE) - (g->i * MINTILE);
-		}
-		if ((min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y/ MINTILE]))
-		{
-			if (MINMAP_WI < ftk_strlen(g->map[min_y/ MINTILE]) * MINTILE)
-				min_x -= (min_x + MINMAP_WI) - (ftk_strlen(g->map[min_y/ MINTILE]) * MINTILE);
-		}
-	}
-	int i = min_x;
-	int j = min_y;
-	while (j <= min_y + MINMAP_HE && j < g->i * MINTILE && y < MINMAP_HE)
-	{
-		i = min_x;
-		x = 0;
-		while (i <= min_x + MINMAP_WI && i < ftk_strlen(g->map[min_y/ MINTILE]) * MINTILE && x < MINMAP_WI)
-		{
-			char *dst = g->d_imag + (y * g->size_line + x * (g->bits_per_pixel / 8));
-			if (g->map[j / MINTILE] && g->map[j / MINTILE][i / MINTILE] == '1')
-				*(unsigned int *)dst = 0xffffff;
-			else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE] == 'D' || g->map[j / MINTILE][i / MINTILE] == 'C'))
-				*(unsigned int *)dst = 0xff0000;
-			else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE] == '0' || g->map[j / MINTILE][i / MINTILE] == g->player_char))
-				*(unsigned int *)dst = 0xff00ff;
-			else
-				*(unsigned int *)dst = 0x000000;
-			i++;
-			x++;
-		}
-		y++;
-		j++;
-	}
-
-	double mi_x = g->player_x / TILE;
-	double mi_y = g->player_y / TILE;
-	int mn_x = (int)(mi_x * MINTILE) - min_x;
-	int mn_y = (int)(mi_y * MINTILE) - min_y;
-
-	int dy = -1;
-	int dx = -1;
-	int px, py;
+	dy = -1;
+	dx = -1;
 	while (dy <= 1)
 	{
 		dx = -1;
@@ -82,24 +30,35 @@ void	draw_minimap(t_game *g)
 			py = mn_y + dy;
 			if (px >= 0 && px < MINMAP_WI && py >= 0 && py < MINMAP_HE)
 			{
-				char *dst = g->d_imag + (py * g->size_line + px * (g->bits_per_pixel / 8));
+				dst = g->d_imag + (py * g->size_line + px * (g->bits_per_pixel
+							/ 8));
 				*(unsigned int *)dst = 0x000000;
 			}
 			dx++;
 		}
 		dy++;
 	}
+}
 
-	double dir_x = cos(g->angle);
-	double dir_y = sin(g->angle);
-	int k = 0;
+void	help1_drow_minimap(t_game *g, int mn_x, int mn_y, char *dst)
+{
+	int		px;
+	int		py;
+	double	dir_x;
+	double	dir_y;
+	int		k;
+
+	k = 0;
+	dir_x = cos(g->angle);
+	dir_y = sin(g->angle);
 	while (k < 6)
 	{
 		px = mn_x + (int)(dir_x * k);
 		py = mn_y + (int)(dir_y * k);
 		if (px >= 0 && px < MINMAP_WI && py >= 0 && py < MINMAP_HE)
 		{
-			char *dst = g->d_imag + (py * g->size_line + px * (g->bits_per_pixel / 8));
+			dst = g->d_imag + (py * g->size_line + px * (g->bits_per_pixel
+						/ 8));
 			*(unsigned int *)dst = 0x000000;
 		}
 		k++;
@@ -107,60 +66,70 @@ void	draw_minimap(t_game *g)
 	mlx_put_image_to_window(g->mlx, g->win, g->imag, 5, 5);
 }
 
-void	help_drow_imag_player(t_game *g)
+void	help2_drow_minimap(t_game *g, int min_x, int min_y, int x)
 {
-	static int	n = 0;
+	int		y;
+	int		i;
+	int		j;
+	char	*dst;
 
-	if (g->shot == 1)
+	i = min_x;
+	j = min_y;
+	y = 0;
+	while (j <= min_y + MINMAP_HE && j < g->i * MINTILE && y < MINMAP_HE)
 	{
-		if (n++ == 2)
+		i = min_x;
+		x = 0;
+		while (i <= min_x + MINMAP_WI && i < ftk_strlen(g->map[min_y / MINTILE])
+			* MINTILE && x < MINMAP_WI)
 		{
-			n = 0;
-			g->h++;
+			dst = g->d_imag + (y * g->size_line + x * (g->bits_per_pixel / 8));
+			help4_drow_minimap(g, dst, i, j);
+			i++;
+			x++;
 		}
-		if (g->ng == 0)
-		{
-			if (g->pst_imag[g->h] == NULL)
-				g->h = 0;
-		}
-		if (g->ng == 1)
-		{
-			if (g->ak_imag[g->h] == NULL)
-				g->h = 0;
-		}
-		if (g->ng == 2)
-		{
-			if (g->mg_imag[g->h] == NULL)
-				g->h = 0;
-		}
+		y++;
+		j++;
 	}
 }
 
-void	drow_imag_player(t_game *g, int x, int y)
+void	help3_drow_minimap(t_game *g, int min_x, int min_y)
 {
-	char *dst, *st;
-	if (g->ng == 0)
-		g->d_p_imag = mlx_get_data_addr(g->pst_imag[g->h], &g->pbpp, &g->psl,
-				&g->pend);
-	if (g->ng == 1)
-		g->d_p_imag = mlx_get_data_addr(g->ak_imag[g->h], &g->pbpp, &g->psl,
-				&g->pend);
-	if (g->ng == 2)
-		g->d_p_imag = mlx_get_data_addr(g->mg_imag[g->h], &g->pbpp, &g->psl,
-				&g->pend);
-	while (y++ <= WIN_HEIGHT)
+	double	mi_x;
+	double	mi_y;
+
+	help2_drow_minimap(g, min_x, min_y, 0);
+	mi_x = g->player_x / TILE;
+	mi_y = g->player_y / TILE;
+	min_x = (int)(mi_x * MINTILE) - min_x;
+	min_y = (int)(mi_y * MINTILE) - min_y;
+	help_drow_minimap(g, min_x, min_y, NULL);
+	help1_drow_minimap(g, min_x, min_y, NULL);
+}
+
+void	draw_minimap(t_game *g, int min_x, int min_y)
+{
+	if (min_x < 0 || min_y < 0)
 	{
-		x = 0;
-		while (x <= WIN_WIDTH)
+		if (min_x < 0)
+			min_x = 0;
+		if (min_y < 0)
+			min_y = 0;
+	}
+	if ((min_y + MINMAP_HE) / MINTILE > g->i - 1
+		|| (min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y / MINTILE]))
+	{
+		if ((min_y + MINMAP_HE) / MINTILE > g->i - 1)
 		{
-			dst = g->d_p_imag + (y * g->psl + x * (g->pbpp / 8));
-			if (*(unsigned int *)dst != 0x01fefe)
-			{
-				st = g->d_imag_v + (y * g->sl + x * (g->bpp / 8));
-				*(unsigned int *)st = *(unsigned int *)dst;
-			}
-			x++;
+			if (MINMAP_HE < g->i * MINTILE)
+				min_y -= (min_y + MINMAP_HE) - (g->i * MINTILE);
+		}
+		if ((min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y / MINTILE]))
+		{
+			if (MINMAP_WI < ftk_strlen(g->map[min_y / MINTILE]) * MINTILE)
+				min_x -= (min_x + MINMAP_WI)
+					- (ftk_strlen(g->map[min_y / MINTILE]) * MINTILE);
 		}
 	}
-	help_drow_imag_player(g);
+	help3_drow_minimap(g, min_x, min_y);
 }
