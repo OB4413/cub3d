@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/24 13:33:44 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 14:59:49 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	help_init_imag_player(t_game *g, int x, int y)
 			&g->yw);
 	g->door_imag = mlx_xpm_file_to_image(g->mlx, "textures/door.xpm", &g->xd,
 			&g->yd);
+	ft_check_images(g);
 }
 
 void	init_imag_player(t_game *g, int x, int y)

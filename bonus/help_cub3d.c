@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:19:46 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 13:30:17 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:20:15 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,22 @@ int	loop_chose_gun(t_game *g, int x, int y)
 	static int	i = 0;
 	static void	*ch_gu = NULL;
 	char		*file;
-	void		*image;
 
-	image = mlx_xpm_file_to_image(g->mlx, "textures/login1.xpm", &x, &y);
-	mlx_put_image_to_window(g->mlx, g->win, image, 1001, 0);
-	if (ch_gu)
-		mlx_destroy_image(g->mlx, ch_gu);
 	file = ft_strjoin("textures/chose_gun/", ft_strjoin(ft_itoa(i), ".xpm"));
 	ch_gu = mlx_xpm_file_to_image(g->mlx, file, &x, &y);
+	if (!ch_gu)
+	{
+		//ft_malloc(0, free, g);
+		exit(1);
+	}
 	mlx_clear_window(g->mlx, g->win);
 	mlx_put_image_to_window(g->mlx, g->win, ch_gu, 0, 0);
 	mlx_string_put(g->mlx, g->win, 420, 450, 0xff0f, "chose the gun");
 	mlx_string_put(g->mlx, g->win, 421, 450, 0xff0f, "chose the gun");
 	usleep(180000);
 	if (i == 13)
-		i = 0;
+	i = 0;
 	i++;
+	mlx_destroy_image(g->mlx, ch_gu);
 	return (0);
 }

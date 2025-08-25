@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:36:49 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 11:12:59 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:28:32 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void		the_distance_with_x(t_game *g, int i, double step_x, double step_y);
 double		dda(t_game *game, int facing_down, int facing_right);
 void		draw_view(t_game *game, int x, double dist, char *dst);
 void		drow_imag_player(t_game *g, int x, int y, char *st);
-void		init_imag_player(t_game *g);
+void		init_imag_player(t_game *g, int x);
 int			prees_key(int key, t_game *game);
 int			release_key(int key, t_game *game);
 void		chose_the_angle_p(t_game *game);

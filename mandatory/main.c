@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:24:13 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/08 10:24:24 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:28:54 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
 bool	is_valid_filename(char *filename)
-
 {
 	if (ft_strlen(filename) < 5 || ft_strncmp(&filename[ft_strlen(filename)]
 			- 4, ".cub", 4) || !ft_strncmp(&filename[ft_strlen(filename)] - 5,

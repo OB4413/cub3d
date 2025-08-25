@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 11:37:07 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/24 11:42:05 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:00:35 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,10 @@ void		init_imag_player(t_game *g, int x, int y);
 int			shot_gun(int butom, int x, int y, t_game *game);
 int			stop_gun(int butom, int x, int y, t_game *game);
 void		raycaster(t_game *game);
-void		help_raycaster(t_game *game);
+void		help_raycaster(t_game *game, int x);
 double		help_dda(t_game *g, int facing_right);
 void		help4_drow_minimap(t_game *g, char *dst, int i, int j);
 void		help_drow_imag_player(t_game *g);
+void		ft_check_images(t_game *g);
 
 #endif

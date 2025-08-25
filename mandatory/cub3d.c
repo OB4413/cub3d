@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/08 11:15:01 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:29:07 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,14 @@ void	help_raycaster(t_game *game)
 	game->player_y *= TILE;
 	game->player_x += TILE / 2;
 	game->player_y += TILE / 2;
+	game->imag_v = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!game->imag_v)
+	{
+		//ft_malloc(0, free, game);
+		exit(1);
+	}
+	game->d_imag_v = mlx_get_data_addr(game->imag_v, &game->bpp, &game->sl,
+			&game->en);
 }
 
 void	raycaster(t_game *game)
@@ -91,10 +99,7 @@ void	raycaster(t_game *game)
 	while (game->map[game->i])
 		game->i++;
 	help_raycaster(game);
-	game->imag_v = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
-	game->d_imag_v = mlx_get_data_addr(game->imag_v, &game->bpp, &game->sl,
-			&game->en);
-	init_imag_player(game);
+	init_imag_player(game, 0);
 	mlx_hook(game->win, 2, 1L << 0, prees_key, game);
 	mlx_hook(game->win, 3, 1L << 1, release_key, game);
 	mlx_loop_hook(game->mlx, raycasting, game);

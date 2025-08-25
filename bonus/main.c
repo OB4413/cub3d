@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:45:02 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/24 15:45:03 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/25 15:31:19 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D_bonus.h"
+
+void	clean_images(t_game *g)
+{
+	(void)g;
+	//ft_malloc(0, free, g);
+	exit(1);
+}
+
+void	ft_check_images(t_game *g)
+{
+	int x;
+
+	x = 0;
+	while (x < 4)
+	{
+		if (!g->ak_imag[x])
+			clean_images(g);
+		x++;
+	}
+	x = 0;
+	while (x < 4)
+	{
+		if (!g->pst_imag[x])
+			clean_images(g);
+		x++;
+	}
+	x = 0;
+	while (x < 4)
+	{
+		if (!g->mg_imag[x])
+			clean_images(g);
+		x++;
+	}
+}
 
 void	raycaster(t_game *game)
 {
@@ -27,7 +61,7 @@ void	raycaster(t_game *game)
 		exit(1);
 	}
 	game->i = 0;
-	help_raycaster(game);
+	help_raycaster(game, 0);
 	mlx_hook(game->win, 2, 1L << 0, prees_key, game);
 	mlx_hook(game->win, 3, 1L << 1, release_key, game);
 	mlx_hook(game->win, 5, 1L << 3, stop_gun, game);
