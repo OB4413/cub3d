@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:41:30 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/24 15:41:31 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/25 20:27:41 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	add_row_to_map(t_game *game, char *row)
 	i = 0;
 	while (game->map && game->map[i])
 		i++;
-	new_map = malloc(sizeof(char *) * (i + 2));
+	new_map = ft_malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while (game->map && game->map[i])
 	{

@@ -2,8 +2,8 @@ NAME = cub3D
 
 NAME_BONUS = cub3D_bonus
 
-SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
-	  mandatory/move_player.c mandatory/dda.c mandatory/help_cub3d.c \
+SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c mandatory/mem_utils.c \
+	  mandatory/move_player.c mandatory/dda.c mandatory/help_cub3d.c mandatory/cleanup_game.c\
 	  mandatory/get_next_line/get_next_line.c \
 	  mandatory/get_next_line/get_next_line_utils.c \
 	  mandatory/parsing/parse_file.c \
@@ -11,6 +11,7 @@ SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
 	  mandatory/parsing/load_config_utils.c \
 	  mandatory/parsing/load_map.c \
 	  mandatory/parsing/check_map.c \
+	  mandatory/utils/ft_destroy_image.c \
 	  mandatory/utils/ft_memset.c \
 	  mandatory/utils/ft_strtrim.c \
 	  mandatory/utils/ft_putstr_fd.c \
@@ -22,8 +23,8 @@ SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c\
 	  mandatory/utils/ft_isdigit.c \
 	  mandatory/utils/ft_atoi.c \
 
-BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c  \
-	  bonus/dda.c bonus/move_player.c bonus/help_cub3d.c bonus/help1_cub3d.c \
+BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c bonus/mem_utils.c  \
+	  bonus/dda.c bonus/move_player.c bonus/help_cub3d.c bonus/help1_cub3d.c bonus/cleanup_game.c \
 	  bonus/minimap_imag_player.c bonus/help2_cub3d.c \
 	  bonus/get_next_line/get_next_line.c \
 	  bonus/get_next_line/get_next_line_utils.c \
@@ -32,6 +33,7 @@ BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c  \
 	  bonus/parsing/load_config_utils.c \
 	  bonus/parsing/load_map.c \
 	  bonus/parsing/check_map.c \
+	  bonus/utils/ft_destroy_image.c \
 	  bonus/utils/ft_memset.c \
 	  bonus/utils/ft_strtrim.c \
 	  bonus/utils/ft_putstr_fd.c \

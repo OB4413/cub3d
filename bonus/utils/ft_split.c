@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:33:43 by ynadime           #+#    #+#             */
-/*   Updated: 2024/10/29 11:33:44 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/25 20:12:03 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
 
-static void	ft_free(char **s)
+static void	free_array(char **s)
 {
 	size_t	i;
 
 	i = 0;
 	while (s[i])
 	{
-		free(s[i]);
+		ft_free(s[i]);
 		i++;
 	}
-	free(s);
+	ft_free(s);
 }
 
 static size_t	word_len(char *s, char c)
@@ -51,10 +51,10 @@ static int	fill(char **dst, char *s, char c, size_t words)
 		if (*s != c && *s)
 		{
 			wordlen = word_len(s, c);
-			dst[i] = (char *)malloc(sizeof(char) * (wordlen + 1));
+			dst[i] = (char *)ft_malloc(sizeof(char) * (wordlen + 1));
 			if (!dst[i])
 			{
-				ft_free(dst);
+				free_array(dst);
 				return (1);
 			}
 			ft_strlcpy(dst[i], s, (wordlen + 1));
@@ -95,7 +95,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	count = wordcount((char *)s, c);
-	str = (char **)malloc((count + 1) * sizeof(char *));
+	str = (char **)ft_malloc((count + 1) * sizeof(char *));
 	if (!str)
 		return (NULL);
 	if (fill(str, (char *)s, c, count))

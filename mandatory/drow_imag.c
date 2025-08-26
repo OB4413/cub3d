@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drow_imag.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:05:33 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/25 15:29:20 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:43:24 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	init_imag_player(t_game *g, int x)
 {
 	int	y;
 
-	g->pst_imag = malloc(sizeof(void *) * 5);
+	g->pst_imag = ft_malloc(sizeof(void *) * 5);
 	g->pst_imag[0] = mlx_xpm_file_to_image(g->mlx,
 			"textures/player/pistol/1.xpm", &x, &y);
 	g->pst_imag[1] = mlx_xpm_file_to_image(g->mlx,
@@ -144,9 +144,10 @@ void	init_imag_player(t_game *g, int x)
 	g->s_image = mlx_xpm_file_to_image(g->mlx, g->so, &g->xs, &g->ys);
 	g->e_image = mlx_xpm_file_to_image(g->mlx, g->ea, &g->xe, &g->ye);
 	g->w_image = mlx_xpm_file_to_image(g->mlx, g->we, &g->xw, &g->yw);
-	if (!g->pst_imag[0] || !g->pst_imag[1] || !g->pst_imag[2] || !g->pst_imag[3])
+	if (!g->pst_imag[0] || !g->pst_imag[1] || !g->pst_imag[2]
+		|| !g->pst_imag[3])
 	{
-		//ft_malloc(0, free, g);
+		cleanup_game(g);
 		exit(1);
 	}
 	g->shot = 0;

@@ -6,23 +6,23 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:41:46 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/24 15:41:47 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:22:46 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-static void	ft_free(char **s)
+static void	free_array(char **s)
 {
 	size_t	i;
 
 	i = 0;
 	while (s[i])
 	{
-		free(s[i]);
+		ft_free(s[i]);
 		i++;
 	}
-	free(s);
+	ft_free(s);
 }
 
 static size_t	word_len(char *s)
@@ -51,10 +51,10 @@ static int	fill(char **dst, char *s, size_t words)
 		if (!ft_isspace(*s) && *s)
 		{
 			wordlen = word_len(s);
-			dst[i] = (char *)malloc(sizeof(char) * (wordlen + 1));
+			dst[i] = (char *)ft_malloc(sizeof(char) * (wordlen + 1));
 			if (!dst[i])
 			{
-				ft_free(dst);
+				free_array(dst);
 				return (1);
 			}
 			ft_strlcpy(dst[i], s, (wordlen + 1));
@@ -95,7 +95,7 @@ char	**ft_split_ws(char const *s)
 	if (!s)
 		return (NULL);
 	count = wordcount((char *)s);
-	str = (char **)malloc((count + 1) * sizeof(char *));
+	str = (char **)ft_malloc((count + 1) * sizeof(char *));
 	if (!str)
 		return (NULL);
 	if (fill(str, (char *)s, count))

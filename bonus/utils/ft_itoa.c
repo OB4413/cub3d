@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 11:04:06 by sodahani          #+#    #+#             */
-/*   Updated: 2025/08/06 14:31:44 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 10:21:32 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*ft_itoa(int n)
 		k++;
 	}
 	j = j + ft_len_int(b);
-	array = calloc(j + 1, sizeof(char));
+	array = ft_malloc((j + 1) * sizeof(char));
 	if (array == NULL)
 		return (NULL);
 	if (n == 0)

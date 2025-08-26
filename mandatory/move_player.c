@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 09:13:37 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/23 11:15:25 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:37:38 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ void	move_player11(t_game *game, double angle_offset)
 int	prees_key(int key, t_game *game)
 {
 	if (key == 65307)
+	{
+		cleanup_game(game);
 		exit(0);
+	}
 	game->keys[key] = 1;
 	if (game->keys[101])
 		game->shot = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:36:49 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/25 15:28:32 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:39:24 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ typedef struct s_ray
 	double	hit_x;
 	double	hit_y;
 }			t_ray;
+
+typedef struct s_alloc_list
+{
+	void				*ptr;
+	struct s_alloc_list	*next;
+}						t_alloc_list;
 
 typedef struct s_game
 {
@@ -122,6 +128,13 @@ typedef struct s_game
 	bool	ceiling_is_set;
 }			t_game;
 
+int			close_window(t_game *game);
+void		cleanup_game(t_game *game);
+void		ft_free(void *ptr);
+void		free_memory(void);
+void		*ft_malloc(size_t size);
+void		destroy_images(t_game *game);
+void		ft_destroy_image(void *mlx, void *img);
 int			ft_strcmp(char *s1, char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 char		**ft_split(char const *s, char c);

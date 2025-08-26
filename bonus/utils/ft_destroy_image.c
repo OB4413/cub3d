@@ -1,34 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   ft_destroy_image.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:38:08 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/25 17:21:55 by ynadime          ###   ########.fr       */
+/*   Created: 2025/08/26 10:46:13 by ynadime           #+#    #+#             */
+/*   Updated: 2025/08/26 10:46:33 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
 
-char	*ft_strtrim(char const *s1, char const *set)
+void	ft_destroy_image(void *mlx, void *img)
 {
-	size_t	len;
-	char	*newstr;
-
-	if (!s1)
-		return (NULL);
-	if (!set)
-		return (ft_strdup(s1));
-	while (*s1 && ft_strchr(set, *s1))
-		s1++;
-	len = ft_strlen(s1);
-	while (len && ft_strchr(set, s1[len - 1]))
-		len--;
-	newstr = (char *)ft_malloc((len + 1) * sizeof(char));
-	if (!newstr)
-		return (NULL);
-	ft_strlcpy(newstr, s1, len + 1);
-	return (newstr);
+	if (img)
+		mlx_destroy_image(mlx, img);
 }

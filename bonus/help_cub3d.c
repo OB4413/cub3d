@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_cub3d.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:19:46 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/25 15:20:15 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 10:38:35 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	loop_chose_gun(t_game *g, int x, int y)
 	ch_gu = mlx_xpm_file_to_image(g->mlx, file, &x, &y);
 	if (!ch_gu)
 	{
-		//ft_malloc(0, free, g);
+		cleanup_game(g);
 		exit(1);
 	}
 	mlx_clear_window(g->mlx, g->win);
@@ -103,7 +103,7 @@ int	loop_chose_gun(t_game *g, int x, int y)
 	mlx_string_put(g->mlx, g->win, 421, 450, 0xff0f, "chose the gun");
 	usleep(180000);
 	if (i == 13)
-	i = 0;
+		i = 0;
 	i++;
 	mlx_destroy_image(g->mlx, ch_gu);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:20:55 by ynadime           #+#    #+#             */
-/*   Updated: 2024/11/26 16:20:56 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/26 11:09:33 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include "../cub3D.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1

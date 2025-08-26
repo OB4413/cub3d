@@ -42,8 +42,8 @@ void	help_the_distance_with_x(t_game *g, double step_x, double step_y, int i)
 
 void	the_distance_with_x(t_game *g, int i, double step_x, double step_y)
 {
-	int		facing_right;
-	int		facing_down;
+	int	facing_right;
+	int	facing_down;
 
 	facing_right = (g->ray_angle < M_PI / 2 || g->ray_angle > 3 * M_PI / 2);
 	facing_down = (g->ray_angle > 0 && g->ray_angle < M_PI);
@@ -90,12 +90,11 @@ void	help_the_distance_with_y(t_game *g, double step_x, double step_y, int i)
 
 void	the_distance_with_y(t_game *g, int i, double step_x, double step_y)
 {
-	int		facing_down;
-	int		facing_right;
+	int	facing_down;
+	int	facing_right;
 
 	facing_down = (g->ray_angle > 0 && g->ray_angle < M_PI);
-	facing_right = (g->ray_angle < M_PI / 2 || g->ray_angle > 3 * M_PI
-			/ 2);
+	facing_right = (g->ray_angle < M_PI / 2 || g->ray_angle > 3 * M_PI / 2);
 	g->ya = floor(g->player_y / TILE) * TILE;
 	if (facing_down)
 		g->ya += TILE;

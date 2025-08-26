@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:09:43 by ynadime           #+#    #+#             */
-/*   Updated: 2024/11/30 12:09:45 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/25 19:36:31 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strdup(const char *s1)
 	char	*str;
 
 	i = 0;
-	str = (char *)malloc((ft_strlen(s1) + 1) * sizeof(char));
+	str = (char *)ft_malloc((ft_strlen(s1) + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	while (s1[i])
@@ -79,7 +79,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	s += start;
 	if (ft_strlen((s)) < len)
 		len = ft_strlen(s);
-	substr = (char *)malloc((len + 1) * sizeof(char));
+	substr = (char *)ft_malloc((len + 1) * sizeof(char));
 	if (!substr)
 		return (NULL);
 	while (s[i] && i < len)
@@ -99,7 +99,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s1 || !s2)
 		return (NULL);
 	len = ft_strlen(s1) + ft_strlen(s2);
-	str = (char *)malloc((len + 1) * sizeof(char));
+	str = (char *)ft_malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	ft_strlcpy(str, s1, (ft_strlen(s1) + 1));

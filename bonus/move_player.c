@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:11:05 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/21 12:24:42 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 10:31:32 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ void	chose_the_angle_p(t_game *game)
 int	prees_key(int key, t_game *game)
 {
 	if (key == 65307)
+	{
+		cleanup_game(game);
 		exit(0);
+	}
 	game->keys[key] = 1;
 	if (game->keys[101])
 		open_and_close_door(game);
-	if (game->keys[121])
-		change_the_gane(game);
 	if (game->keys[113])
+		change_the_gane(game);
+	if (game->keys[121])
 		game->ng = 4;
 	if (key == 99)
 		game->jump = (WIN_HEIGHT / 2) - 200;

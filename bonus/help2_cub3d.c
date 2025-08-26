@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help2_cub3d.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:04:53 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/25 15:16:04 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/26 10:15:31 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void	help_raycaster(t_game *game, int x)
 	image = mlx_xpm_file_to_image(game->mlx, "textures/open_game.xpm", &x, &y);
 	if (!image || !game->imag_v || !game->imag)
 	{
-		//ft_malloc(0, free, game);
-		exit(0);
+		cleanup_game(game);
+		exit(1);
 	}
 	game->d_imag = mlx_get_data_addr(game->imag, &game->bits_per_pixel,
 			&game->size_line, &game->endian);

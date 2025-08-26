@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:09:06 by ynadime           #+#    #+#             */
-/*   Updated: 2025/05/10 19:20:31 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/25 20:09:43 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ char	*setline(char **stock)
 			*stock = ft_strdup(newline + 1);
 		else
 			*stock = NULL;
-		return (free(tmp), line);
+		return (ft_free(tmp), line);
 	}
 	else if (**stock)
 	{
 		line = ft_strdup(*stock);
-		return (free(*stock), *stock = NULL, line);
+		return (ft_free(*stock), *stock = NULL, line);
 	}
-	free(*stock);
+	ft_free(*stock);
 	*stock = NULL;
 	return (NULL);
 }
@@ -64,7 +64,7 @@ ssize_t	fill_stock(int fd, ssize_t bytesread, char **stock, char *buffer)
 		buffer[bytesread] = '\0';
 		tmp = *stock;
 		*stock = ft_strjoin(*stock, buffer);
-		free(tmp);
+		ft_free(tmp);
 		if (ft_strchr(*stock, '\n'))
 			return (0);
 		bytesread = read(fd, buffer, BUFFER_SIZE);
@@ -80,7 +80,7 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || fd >= 1024)
 		return (NULL);
-	buffer = (char *)malloc((size_t)BUFFER_SIZE + 1);
+	buffer = (char *)ft_malloc((size_t)BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	if (!stock[fd])
@@ -90,12 +90,12 @@ char	*get_next_line(int fd)
 	{
 		if (fill_stock(fd, bytesread, &stock[fd], buffer))
 		{
-			free(stock[fd]);
+			ft_free(stock[fd]);
 			stock[fd] = NULL;
-			free(buffer);
+			ft_free(buffer);
 			return (NULL);
 		}
 	}
-	free(buffer);
+	ft_free(buffer);
 	return (setline(&stock[fd]));
 }

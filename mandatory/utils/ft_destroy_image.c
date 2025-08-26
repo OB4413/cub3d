@@ -1,43 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_file.c                                       :+:      :+:    :+:   */
+/*   ft_destroy_image.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 15:41:34 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/26 11:16:16 by ynadime          ###   ########.fr       */
+/*   Created: 2025/08/26 10:46:13 by ynadime           #+#    #+#             */
+/*   Updated: 2025/08/26 10:55:24 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-bool	is_empty_line(char *line)
+void	ft_destroy_image(void *mlx, void *img)
 {
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != ' ' && line[i] != '\t')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-int	parse_file(char *path, t_game *game)
-{
-	int	fd;
-
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-	{
-		ft_putstr_fd("Error!\nFailed to open map file.\n", 2);
-		return (1);
-	}
-	if (load_config(game, fd) || load_map(game, fd))
-		return (close(fd), 1);
-	close(fd);
-	return (0);
+	if (img)
+		mlx_destroy_image(mlx, img);
 }
