@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:05:33 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 11:43:24 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/27 20:38:35 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	drow_imag_player(t_game *g, int x, int y, char *st)
 		while (x <= WIN_WIDTH)
 		{
 			dst = g->d_p_imag + (y * g->psl + x * (g->pbpp / 8));
-			if (*(unsigned int *)dst != 0x01fefe)
+			if (*(unsigned int *)dst != 0x00000000)
 			{
 				st = g->d_imag_v + (y * g->sl + x * (g->bpp / 8));
 				*(unsigned int *)st = *(unsigned int *)dst;
