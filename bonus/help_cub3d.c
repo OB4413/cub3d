@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_cub3d.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:19:46 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 12:48:44 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/27 20:44:25 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ int	loop_chose_gun(t_game *g, int x, int y)
 	}
 	mlx_clear_window(g->mlx, g->win);
 	mlx_put_image_to_window(g->mlx, g->win, ch_gu, 0, 0);
-	mlx_string_put(g->mlx, g->win, 420, 450, 0xff0f, "chose the gun");
-	mlx_string_put(g->mlx, g->win, 421, 450, 0xff0f, "chose the gun");
+	mlx_string_put(g->mlx, g->win, 420, 450, 0xff0f, "Choose a gun");
+	mlx_string_put(g->mlx, g->win, 421, 450, 0xff0f, "Choose a gun");
 	usleep(180000);
 	if (i == 13)
 		i = 0;
