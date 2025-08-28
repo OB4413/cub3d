@@ -54,19 +54,17 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
-MINILIBX = minilibx-linux/libmlx.a
-
 RM = rm -f
 
 all: $(NAME) clean
 
 bonus: $(NAME_BONUS) clean
 
-$(NAME): $(OBJS) $(MINILIBX)
-	$(CC) $(CFLAGS) $(OBJS) $(MINILIBX) -lm -lXext -lX11 -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -lm -lXext -lX11 -lmlx -o $(NAME)
 
-$(NAME_BONUS): $(BONUS_OBJS) $(MINILIBX)
-	$(CC) $(CFLAGS) $(BONUS_OBJS) $(MINILIBX) -lm -lXext -lX11 -o $(NAME_BONUS)
+$(NAME_BONUS): $(BONUS_OBJS)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) -lm -lXext -lX11 -lmlx -o $(NAME_BONUS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

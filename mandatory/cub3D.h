@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:36:49 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 11:39:24 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/28 10:55:58 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../minilibx-linux/mlx.h"
+# include <X11/keysym.h>
+# include <X11/X.h>
+# include <mlx.h>
 # include "get_next_line/get_next_line.h"
 # include <fcntl.h>
 # include <math.h>
