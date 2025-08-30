@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 11:37:07 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/28 10:55:47 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/30 19:00:24 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,8 @@ int						update_position_player(t_game *game, int x, int y);
 void					move_player11(t_game *game, double angle_offset);
 int						ftk_strlen(char *str);
 int						check_the_dor(t_game *g, double y, double x, int v);
-int						is_wall(double x, double y, t_game *game);
+int						is_wall(double x, double y, t_game *game,
+							double angle_offset);
 void					normalize_angle(t_game *game);
 void					open_and_close_door(t_game *g);
 void					change_the_gane(t_game *g);
@@ -191,5 +192,7 @@ double					help_dda(t_game *g, int facing_right);
 void					help4_drow_minimap(t_game *g, char *dst, int i, int j);
 void					help_drow_imag_player(t_game *g);
 void					ft_check_images(t_game *g);
+int						help_is_wall(double angle_offset, t_game *g, int x,
+							int y);
 
 #endif

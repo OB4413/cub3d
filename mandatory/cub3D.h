@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:36:49 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/28 10:55:58 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/30 12:16:12 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ bool		is_valid_filename(char *filename);
 void		raycaster(t_game *game);
 void		drow_imag_in(t_game *g, int x, int *y, int start);
 bool		is_texture_valid(t_game *game, char *path);
-int			is_wall(double x, double y, t_game *game);
+int			is_wall(double x, double y, t_game *game, double angle_offset);
 void		normalize_angle(t_game *game);
 int			ftk_strlen(char *str);
 void		the_distance_with_y(t_game *g, int i, double step_x, double step_y);

@@ -23,7 +23,7 @@ SRC = mandatory/main.c mandatory/cub3d.c mandatory/drow_imag.c mandatory/mem_uti
 	  mandatory/utils/ft_isdigit.c \
 	  mandatory/utils/ft_atoi.c \
 
-BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c bonus/mem_utils.c  \
+BONUS_SRC = bonus/main.c bonus/cub3d_bonus.c bonus/drow_imag_bonus.c bonus/mem_utils.c bonus/help3_cub3d.c \
 	  bonus/dda.c bonus/move_player.c bonus/help_cub3d.c bonus/help1_cub3d.c bonus/cleanup_game.c \
 	  bonus/minimap_imag_player.c bonus/help2_cub3d.c \
 	  bonus/get_next_line/get_next_line.c \
@@ -56,9 +56,9 @@ CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
 
 RM = rm -f
 
-all: $(NAME) clean
+all: $(NAME)
 
-bonus: $(NAME_BONUS) clean
+bonus: $(NAME_BONUS)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -lm -lXext -lX11 -lmlx -o $(NAME)

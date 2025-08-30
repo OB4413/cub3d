@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 09:13:37 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 11:37:38 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/30 12:15:25 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	move_player11(t_game *game, double angle_offset)
 
 	nx = game->player_x + cos(game->angle + angle_offset) * SPED;
 	ny = game->player_y + sin(game->angle + angle_offset) * SPED;
-	if (!is_wall(nx, ny, game) && ny > TILE && nx > TILE)
+	if (!is_wall(nx, ny, game, angle_offset) && ny > TILE && nx > TILE)
 	{
 		game->player_x = nx;
 		game->player_y = ny;

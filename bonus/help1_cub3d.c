@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   help1_cub3d.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: obarais <obarais@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:23:06 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/21 11:26:38 by obarais          ###   ########.fr       */
+/*   Updated: 2025/08/30 19:04:10 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D_bonus.h"
 
-int	is_wall(double x, double y, t_game *game)
+int	is_wall(double x, double y, t_game *game, double angle_offset)
 {
 	int	map_x;
 	int	map_y;
 
 	map_x = (int)(x / TILE);
 	map_y = (int)(y / TILE);
+	if (map_x != (int)game->player_x / TILE && map_y != (int)game->player_y
+		/ TILE && game->map[map_y][map_x] == '0')
+		return (help_is_wall(angle_offset, game, game->player_x
+				/ TILE, game->player_y / TILE));
 	if (game->map[map_y][map_x] == 'D')
 		return (1);
 	if (game->map[map_y][map_x] == 'C')
@@ -31,10 +35,14 @@ int	is_wall(double x, double y, t_game *game)
 
 void	normalize_angle(t_game *game)
 {
-	while (game->ray_angle < 0)
+	if (game->ray_angle < 0)
 		game->ray_angle += 2 * M_PI;
-	while (game->ray_angle >= 2 * M_PI)
+	if (game->ray_angle >= 2 * M_PI)
 		game->ray_angle -= 2 * M_PI;
+	if (game->angle < 0)
+		game->angle += 2 * M_PI;
+	if (game->angle >= 2 * M_PI)
+		game->angle -= 2 * M_PI;
 }
 
 int	ftk_strlen(char *str)

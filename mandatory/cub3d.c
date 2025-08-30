@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 11:39:58 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/30 19:10:18 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 void	normalize_angle(t_game *game)
 {
-	while (game->ray_angle < 0)
+	if (game->ray_angle < 0)
 		game->ray_angle += 2 * M_PI;
-	while (game->ray_angle >= 2 * M_PI)
+	if (game->ray_angle >= 2 * M_PI)
 		game->ray_angle -= 2 * M_PI;
+	if (game->angle < 0)
+		game->angle += 2 * M_PI;
+	if (game->angle >= 2 * M_PI)
+		game->angle -= 2 * M_PI;
 }
 
 int	raycasting(t_game *game)

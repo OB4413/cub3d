@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:11:05 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 10:31:32 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/30 18:46:33 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	move_player11(t_game *game, double angle_offset)
 	ny = sin(game->angle + angle_offset) * SPED;
 	a = game->player_x + nx;
 	b = game->player_y + ny;
-	if (!is_wall(a, b, game) && a > TILE && b > TILE)
+	if (!is_wall(a, b, game, angle_offset) && a > TILE && b > TILE)
 	{
 		game->player_x += nx;
 		game->player_y += ny;
@@ -73,9 +73,9 @@ void	move_player11(t_game *game, double angle_offset)
 		ny = sin(game->angle + angle_offset) * SPED / 2;
 		a = game->player_x + nx;
 		b = game->player_y + ny;
-		if (!is_wall(game->player_x, b, game) && b > TILE)
+		if (!is_wall(game->player_x, b, game, angle_offset) && b > TILE)
 			game->player_y += ny;
-		else if (!is_wall(a, game->player_y, game) && a > TILE)
+		else if (!is_wall(a, game->player_y, game, angle_offset) && a > TILE)
 			game->player_x += nx;
 	}
 }
