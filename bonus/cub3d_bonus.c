@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:48:03 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/25 19:37:33 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/31 22:23:18 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ void	help_init_imag_player(t_game *g, int x, int y)
 	g->ak_imag[3] = mlx_xpm_file_to_image(g->mlx, "textures/player/AK/4.xpm",
 			&x, &y);
 	g->ak_imag[4] = NULL;
-	g->n_image = mlx_xpm_file_to_image(g->mlx, "textures/N.xpm", &g->xn,
+	g->n_image = mlx_xpm_file_to_image(g->mlx, g->no, &g->xn,
 			&g->yn);
-	g->s_image = mlx_xpm_file_to_image(g->mlx, "textures/S.xpm", &g->xs,
+	g->s_image = mlx_xpm_file_to_image(g->mlx, g->so, &g->xs,
 			&g->ys);
-	g->e_image = mlx_xpm_file_to_image(g->mlx, "textures/E.xpm", &g->xe,
+	g->e_image = mlx_xpm_file_to_image(g->mlx, g->ea, &g->xe,
 			&g->ye);
-	g->w_image = mlx_xpm_file_to_image(g->mlx, "textures/W.xpm", &g->xw,
+	g->w_image = mlx_xpm_file_to_image(g->mlx, g->we, &g->xw,
 			&g->yw);
 	g->door_imag = mlx_xpm_file_to_image(g->mlx, "textures/door.xpm", &g->xd,
 			&g->yd);

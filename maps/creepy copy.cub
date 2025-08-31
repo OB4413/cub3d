@@ -1,11 +1,11 @@
-NO textures/N.xpm
-EA textures/E.xpm
-SO textures/S.xpm
-WE textures/W.xpm
+NO textures/Orange6.xpm
+EA textures/Orange8.xpm
+SO textures/Red14.xpm
+WE textures/Wood1.xpm
 
 
-C 30,200,100
-F 2,25,120
+C 121,50,20
+F 1,11,48
 
 11111111111111111111111
 10000000000000000000001

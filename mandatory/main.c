@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 10:24:13 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/26 11:38:49 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/08/31 22:20:24 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int	main(int ac, char **av)
 		exit(1);
 	}
 	if (parse_file(av[1], &game))
-		return (1);
+		return (cleanup_game(&game), 1);
 	raycaster(&game);
 }
