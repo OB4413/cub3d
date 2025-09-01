@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:23:06 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/30 19:04:10 by obarais          ###   ########.fr       */
+/*   Updated: 2025/09/01 17:47:42 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_wall(double x, double y, t_game *game, double angle_offset)
 	map_x = (int)(x / TILE);
 	map_y = (int)(y / TILE);
 	if (map_x != (int)game->player_x / TILE && map_y != (int)game->player_y
-		/ TILE && game->map[map_y][map_x] == '0')
+		/ TILE && game->map[map_y][map_x] != '1')
 		return (help_is_wall(angle_offset, game, game->player_x
 				/ TILE, game->player_y / TILE));
 	if (game->map[map_y][map_x] == 'D')
