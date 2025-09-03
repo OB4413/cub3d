@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help2_cub3d.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
+/*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:04:53 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/27 20:37:26 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/09/03 14:26:11 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,19 @@ double	help_dda(t_game *g, int facing_right)
 
 void	help4_drow_minimap(t_game *g, char *dst, int i, int j)
 {
-	if (g->map[j / MINTILE] && g->map[j / MINTILE][i / MINTILE] == '1')
-		*(unsigned int *)dst = 0xffffff;
-	else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
-		== 'D' || g->map[j / MINTILE][i / MINTILE] == 'C'))
-		*(unsigned int *)dst = 0xff0000;
-	else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
-		== '0' || g->map[j / MINTILE][i / MINTILE] == g->player_char))
-		*(unsigned int *)dst = 0xff00ff;
+	if (j < g->i * MINTILE && i < ftk_strlen(g->map[j / MINTILE]) * MINTILE)
+	{
+		if (g->map[j / MINTILE] && g->map[j / MINTILE][i / MINTILE] == '1')
+			*(unsigned int *)dst = 0xffffff;
+		else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
+			== 'D' || g->map[j / MINTILE][i / MINTILE] == 'C'))
+			*(unsigned int *)dst = 0xff0000;
+		else if (g->map[j / MINTILE] && (g->map[j / MINTILE][i / MINTILE]
+			== '0' || g->map[j / MINTILE][i / MINTILE] == g->player_char))
+			*(unsigned int *)dst = 0xff00ff;
+		else
+			*(unsigned int *)dst = 0x000000;
+	}
 	else
 		*(unsigned int *)dst = 0x000000;
 }

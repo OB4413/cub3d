@@ -6,7 +6,7 @@
 /*   By: obarais <obarais@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:27:40 by obarais           #+#    #+#             */
-/*   Updated: 2025/08/24 11:39:58 by obarais          ###   ########.fr       */
+/*   Updated: 2025/09/03 14:23:53 by obarais          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,11 @@ void	help2_drow_minimap(t_game *g, int min_x, int min_y, int x)
 	i = min_x;
 	j = min_y;
 	y = 0;
-	while (j <= min_y + MINMAP_HE && j < g->i * MINTILE && y < MINMAP_HE)
+	while (j <= min_y + MINMAP_HE && y < MINMAP_HE)
 	{
 		i = min_x;
 		x = 0;
-		while (i <= min_x + MINMAP_WI && i < ftk_strlen(g->map[min_y / MINTILE])
-			* MINTILE && x < MINMAP_WI)
+		while (i <= min_x + MINMAP_WI && x < MINMAP_WI)
 		{
 			dst = g->d_imag + (y * g->size_line + x * (g->bits_per_pixel / 8));
 			help4_drow_minimap(g, dst, i, j);
@@ -115,21 +114,6 @@ void	draw_minimap(t_game *g, int min_x, int min_y)
 			min_x = 0;
 		if (min_y < 0)
 			min_y = 0;
-	}
-	if ((min_y + MINMAP_HE) / MINTILE > g->i - 1
-		|| (min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y / MINTILE]))
-	{
-		if ((min_y + MINMAP_HE) / MINTILE > g->i - 1)
-		{
-			if (MINMAP_HE < g->i * MINTILE)
-				min_y -= (min_y + MINMAP_HE) - (g->i * MINTILE);
-		}
-		if ((min_x + MINMAP_WI) / MINTILE > ftk_strlen(g->map[min_y / MINTILE]))
-		{
-			if (MINMAP_WI < ftk_strlen(g->map[min_y / MINTILE]) * MINTILE)
-				min_x -= (min_x + MINMAP_WI)
-					- (ftk_strlen(g->map[min_y / MINTILE]) * MINTILE);
-		}
 	}
 	help3_drow_minimap(g, min_x, min_y);
 }
