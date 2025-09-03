@@ -6,7 +6,7 @@
 /*   By: ynadime <ynadime@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:44:08 by ynadime           #+#    #+#             */
-/*   Updated: 2025/08/24 15:44:09 by ynadime          ###   ########.fr       */
+/*   Updated: 2025/09/03 18:30:34 by ynadime          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	validate_map_surroundings(char **map)
 				return (ft_putstr_fd("Error!\nThe map is not closed.\n", 2), 1);
 			if (map[y][x] == 'D' && !is_door_between_walls(map, x, y))
 			{
-				ft_putstr_fd("Error!\nDoor must be placed between walls.", 2);
+				ft_putstr_fd("Error!\nDoor must be placed between walls.\n", 2);
 				return (1);
 			}
 			x++;
